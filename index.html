@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
+<meta name="google" content="notranslate">
+<meta http-equiv="Content-Language" content="en">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Truth Machine – CPK Santos</title>
@@ -130,6 +132,11 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .finale p{font-size:1rem;color:rgba(255,255,255,.6);position:relative;z-index:1;}
 .finale .big-pts{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:var(--orange);margin:22px 0;position:relative;z-index:1;text-shadow:0 0 30px rgba(245,166,35,.4);}
 @media(max-width:600px){.section-title-bar{padding:22px 20px 26px;}.game-section{padding:38px 16px;}.mem-f{font-size:1.1rem;}.tf-row{flex-direction:column;}.script-inner{padding:18px 16px 22px;}.script-lines li{font-size:.92rem;}.hero-names{font-size:.82rem;}}
+
+/* block translation visual artifacts */
+.notranslate, [translate="no"] { -webkit-user-select: text; }
+font[face] { display: contents !important; } /* neutralise Google Translate font injections */
+
 </style>
 </head>
 <body>
@@ -982,6 +989,37 @@ function g5End() {
   document.getElementById('g5-sub').textContent = sub;
 }
 g5Render();
+
+
+/* ── FORCE ENGLISH — block all browser translation ── */
+(function() {
+  // Set lang firmly
+  document.documentElement.lang = 'en';
+  document.documentElement.setAttribute('translate', 'no');
+
+  // Block Chrome translate bar
+  var meta = document.createElement('meta');
+  meta.name = 'google'; meta.content = 'notranslate';
+  document.head.appendChild(meta);
+
+  // Add notranslate class to body and all elements
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('notranslate');
+    // Observe for any translation attempt and revert
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          var el = m.target;
+          if (el.classList.contains('translated-ltr') || el.classList.contains('translated-rtl')) {
+            // Trigger re-render to restore original text
+            document.documentElement.lang = 'en';
+          }
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true, subtree: false });
+  });
+})();
 
 </script>
 </body>
