@@ -1,1089 +1,988 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Máquina da Verdade – Feira Literária</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<title>The Truth Machine – CPK Santos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #050a14;
-    --surface: #0b1628;
-    --card: #101f38;
-    --accent: #00e5ff;
-    --accent2: #ff3cac;
-    --accent3: #7b2fff;
-    --gold: #ffd700;
-    --text: #e0f4ff;
-    --muted: #6a8aaa;
-    --green: #00ff88;
-    --red: #ff4444;
-    --glow: 0 0 20px rgba(0,229,255,0.4);
-    --glow2: 0 0 20px rgba(255,60,172,0.4);
-  }
-
-  * { margin:0; padding:0; box-sizing:border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Exo 2', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* GRID BG */
-  body::before {
-    content:'';
-    position:fixed; inset:0;
-    background-image:
-      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events:none; z-index:0;
-  }
-
-  /* HERO */
-  #hero {
-    min-height: 100vh;
-    display: flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    text-align:center;
-    padding: 40px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  #hero::after {
-    content:'';
-    position:absolute;
-    width:600px; height:600px;
-    border-radius:50%;
-    background: radial-gradient(circle, rgba(123,47,255,0.15) 0%, transparent 70%);
-    top:50%; left:50%; transform:translate(-50%,-50%);
-    animation: pulse-hero 4s ease-in-out infinite;
-  }
-
-  @keyframes pulse-hero {
-    0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.6;}
-    50%{ transform:translate(-50%,-50%) scale(1.2); opacity:1;}
-  }
-
-  .hero-eyebrow {
-    font-family:'Orbitron',sans-serif;
-    font-size:.75rem; letter-spacing:.25em;
-    color:var(--accent); text-transform:uppercase;
-    margin-bottom:20px;
-    animation: fadeUp .8s ease both;
-  }
-
-  .hero-title {
-    font-family:'Orbitron',sans-serif;
-    font-size: clamp(2.2rem, 7vw, 5rem);
-    font-weight:900; line-height:1.05;
-    background: linear-gradient(135deg, var(--accent), var(--accent3), var(--accent2));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    animation: fadeUp .8s .2s ease both;
-    position:relative; z-index:1;
-  }
-
-  .hero-sub {
-    font-size:1.1rem; color:var(--muted);
-    margin: 12px 0 8px;
-    animation: fadeUp .8s .35s ease both;
-  }
-
-  .hero-author {
-    font-family:'Orbitron',sans-serif;
-    font-size:.85rem; color:var(--accent2);
-    letter-spacing:.15em; margin-bottom:40px;
-    animation: fadeUp .8s .45s ease both;
-  }
-
-  .scan-line {
-    width:200px; height:3px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    margin: 0 auto 50px;
-    animation: scan 2s ease-in-out infinite, fadeUp .8s .5s ease both;
-  }
-
-  @keyframes scan { 0%,100%{opacity:.3;} 50%{opacity:1;} }
-
-  .nav-dots {
-    display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
-    animation: fadeUp .8s .6s ease both;
-    position:relative; z-index:1;
-  }
-
-  .nav-dot {
-    padding:10px 22px;
-    border:1px solid rgba(0,229,255,0.3);
-    border-radius:30px;
-    font-family:'Orbitron',sans-serif; font-size:.65rem;
-    letter-spacing:.1em; color:var(--accent);
-    cursor:pointer; text-decoration:none;
-    transition: all .3s;
-    background: rgba(0,229,255,0.05);
-  }
-  .nav-dot:hover {
-    background:rgba(0,229,255,0.15);
-    border-color:var(--accent);
-    box-shadow: var(--glow);
-  }
-
-  @keyframes fadeUp {
-    from{opacity:0;transform:translateY(30px);}
-    to{opacity:1;transform:translateY(0);}
-  }
-
-  /* SECTIONS */
-  .section {
-    max-width:860px; margin:0 auto;
-    padding: 80px 24px 40px;
-    position:relative; z-index:1;
-  }
-
-  .section-header {
-    display:flex; align-items:center; gap:20px;
-    margin-bottom:32px;
-  }
-
-  .section-num {
-    font-family:'Orbitron',sans-serif;
-    font-size:3.5rem; font-weight:900;
-    line-height:1;
-    opacity:.12; color:var(--accent);
-  }
-
-  .section-label {
-    display:flex; flex-direction:column;
-  }
-
-  .section-tag {
-    font-family:'Orbitron',sans-serif;
-    font-size:.65rem; letter-spacing:.2em;
-    color:var(--accent2); text-transform:uppercase;
-    margin-bottom:4px;
-  }
-
-  .section-title {
-    font-family:'Orbitron',sans-serif;
-    font-size: clamp(1.3rem,3.5vw,2rem);
-    font-weight:700; color:var(--text);
-  }
-
-  .content-card {
-    background: var(--card);
-    border:1px solid rgba(0,229,255,0.1);
-    border-radius:16px;
-    padding:32px;
-    position:relative;
-    overflow:hidden;
-    margin-bottom:32px;
-  }
-
-  .content-card::before {
-    content:'';
-    position:absolute; top:0; left:0;
-    width:3px; height:100%;
-    background: linear-gradient(180deg, var(--accent), var(--accent3));
-  }
-
-  .content-card p {
-    font-size:1.05rem; line-height:1.85;
-    color:#c8dff0; margin-bottom:16px;
-  }
-  .content-card p:last-child { margin-bottom:0; }
-
-  .highlight-box {
-    background:rgba(0,229,255,0.06);
-    border:1px solid rgba(0,229,255,0.2);
-    border-radius:10px; padding:16px 20px;
-    margin:20px 0;
-    font-style:italic; color:var(--accent);
-    font-size:.95rem;
-  }
-
-  .char-list {
-    display:flex; flex-wrap:wrap; gap:12px;
-    margin:20px 0;
-  }
-
-  .char-tag {
-    padding:8px 18px;
-    border-radius:30px;
-    font-size:.85rem; font-family:'Orbitron',sans-serif;
-    font-size:.65rem; letter-spacing:.05em;
-  }
-  .char-tag.a { background:rgba(0,229,255,0.1); border:1px solid rgba(0,229,255,0.3); color:var(--accent); }
-  .char-tag.b { background:rgba(255,60,172,0.1); border:1px solid rgba(255,60,172,0.3); color:var(--accent2); }
-  .char-tag.c { background:rgba(123,47,255,0.1); border:1px solid rgba(123,47,255,0.3); color:#b08fff; }
-
-  /* DIVIDER */
-  .divider {
-    max-width:860px; margin:0 auto;
-    display:flex; align-items:center; gap:16px;
-    padding:0 24px;
-    position:relative; z-index:1;
-  }
-  .divider-line { flex:1; height:1px; background:rgba(0,229,255,0.1); }
-  .divider-icon {
-    font-size:1.2rem;
-    animation: rotate 6s linear infinite;
-  }
-  @keyframes rotate { to{transform:rotate(360deg);} }
-
-  /* MINI GAME WRAPPER */
-  .game-wrapper {
-    max-width:860px; margin:0 auto;
-    padding:0 24px 80px;
-    position:relative; z-index:1;
-  }
-
-  .game-card {
-    background: linear-gradient(135deg, rgba(123,47,255,0.08), rgba(0,229,255,0.05));
-    border:1px solid rgba(123,47,255,0.3);
-    border-radius:20px;
-    padding:36px 32px;
-    position:relative; overflow:hidden;
-  }
-
-  .game-card::after {
-    content:'';
-    position:absolute; top:-50%; right:-50%;
-    width:300px; height:300px;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(123,47,255,0.08) 0%, transparent 70%);
-    pointer-events:none;
-  }
-
-  .game-title {
-    font-family:'Orbitron',sans-serif;
-    font-size:.65rem; letter-spacing:.2em;
-    color:var(--accent3); text-transform:uppercase;
-    margin-bottom:6px;
-  }
-
-  .game-name {
-    font-family:'Orbitron',sans-serif;
-    font-size:1.3rem; font-weight:700;
-    margin-bottom:20px; color:var(--text);
-  }
-
-  /* QUIZ GAME */
-  .quiz-question {
-    font-size:1.1rem; line-height:1.7;
-    margin-bottom:20px; color:#c8dff0;
-  }
-
-  .quiz-options {
-    display:flex; flex-direction:column; gap:10px;
-    margin-bottom:20px;
-  }
-
-  .quiz-btn {
-    padding:14px 20px; border-radius:10px;
-    border:1px solid rgba(0,229,255,0.2);
-    background:rgba(0,229,255,0.04);
-    color:var(--text); font-family:'Exo 2',sans-serif;
-    font-size:.95rem; cursor:pointer; text-align:left;
-    transition:all .25s;
-  }
-  .quiz-btn:hover:not(:disabled) {
-    background:rgba(0,229,255,0.12);
-    border-color:var(--accent);
-    transform:translateX(6px);
-  }
-  .quiz-btn.correct {
-    background:rgba(0,255,136,0.15);
-    border-color:var(--green); color:var(--green);
-  }
-  .quiz-btn.wrong {
-    background:rgba(255,68,68,0.15);
-    border-color:var(--red); color:var(--red);
-  }
-  .quiz-btn:disabled { cursor:default; }
-
-  .quiz-feedback {
-    padding:14px 20px; border-radius:10px;
-    font-size:.95rem; min-height:52px;
-    display:flex; align-items:center; gap:10px;
-    transition:all .3s;
-  }
-  .quiz-feedback.show-correct {
-    background:rgba(0,255,136,0.1);
-    border:1px solid var(--green); color:var(--green);
-  }
-  .quiz-feedback.show-wrong {
-    background:rgba(255,68,68,0.1);
-    border:1px solid var(--red); color:var(--red);
-  }
-
-  .game-btn {
-    margin-top:16px;
-    padding:12px 30px; border-radius:30px;
-    border:none;
-    background: linear-gradient(135deg, var(--accent3), var(--accent2));
-    color:#fff; font-family:'Orbitron',sans-serif;
-    font-size:.7rem; letter-spacing:.1em;
-    cursor:pointer; transition:all .3s;
-    box-shadow: 0 4px 20px rgba(123,47,255,0.4);
-  }
-  .game-btn:hover { transform:translateY(-2px); box-shadow:0 6px 28px rgba(123,47,255,0.6); }
-
-  /* TRUE/FALSE GAME */
-  .tf-statement {
-    font-size:1.15rem; line-height:1.7;
-    color:#c8dff0; margin-bottom:24px;
-    min-height:60px;
-  }
-
-  .tf-btns {
-    display:flex; gap:16px;
-  }
-
-  .tf-btn {
-    flex:1; padding:18px;
-    border-radius:12px; border:none;
-    font-family:'Orbitron',sans-serif;
-    font-size:.85rem; font-weight:700;
-    cursor:pointer; transition:all .3s;
-    letter-spacing:.05em;
-  }
-  .tf-btn.verdade {
-    background:rgba(0,255,136,0.15);
-    border:1px solid var(--green); color:var(--green);
-  }
-  .tf-btn.mentira {
-    background:rgba(255,68,68,0.15);
-    border:1px solid var(--red); color:var(--red);
-  }
-  .tf-btn:hover:not(:disabled) { transform:scale(1.04); filter:brightness(1.3); }
-  .tf-btn:disabled { opacity:.5; cursor:default; }
-
-  .tf-score {
-    font-family:'Orbitron',sans-serif;
-    font-size:.8rem; color:var(--muted);
-    margin-bottom:16px; letter-spacing:.1em;
-  }
-
-  /* WORD SCRAMBLE */
-  .scramble-word {
-    font-family:'Orbitron',sans-serif;
-    font-size:2.5rem; font-weight:900; letter-spacing:.3em;
-    color:var(--accent); text-align:center;
-    margin:20px 0; padding:20px;
-    background:rgba(0,229,255,0.05);
-    border:1px solid rgba(0,229,255,0.2);
-    border-radius:12px;
-    text-shadow: var(--glow);
-  }
-
-  .scramble-input {
-    width:100%; padding:14px 20px;
-    border-radius:10px;
-    border:1px solid rgba(0,229,255,0.3);
-    background:rgba(0,229,255,0.05);
-    color:var(--text); font-family:'Exo 2',sans-serif;
-    font-size:1.1rem; text-align:center;
-    text-transform:uppercase; letter-spacing:.1em;
-    outline:none; transition:border .3s;
-    margin-bottom:12px;
-  }
-  .scramble-input:focus { border-color:var(--accent); box-shadow:var(--glow); }
-
-  .scramble-hint {
-    font-size:.85rem; color:var(--muted);
-    text-align:center; margin-bottom:20px;
-  }
-
-  /* CLICK GAME */
-  .click-area {
-    height:200px; position:relative;
-    background:rgba(0,0,0,0.2);
-    border:1px solid rgba(255,60,172,0.2);
-    border-radius:12px; overflow:hidden;
-    cursor:crosshair; user-select:none;
-    margin:20px 0;
-  }
-
-  .click-target {
-    position:absolute;
-    width:50px; height:50px;
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.5rem;
-    cursor:pointer; transition:transform .15s;
-    animation: pop-in .2s ease;
-  }
-  .click-target:hover { transform:scale(1.1); }
-
-  @keyframes pop-in {
-    from{transform:scale(0);} to{transform:scale(1);}
-  }
-
-  .click-stats {
-    display:flex; gap:24px; justify-content:center;
-    font-family:'Orbitron',sans-serif; font-size:.75rem;
-    color:var(--muted); letter-spacing:.1em; margin-bottom:16px;
-  }
-
-  .click-stats span { color:var(--text); }
-
-  /* MEMORY GAME */
-  .memory-grid {
-    display:grid; grid-template-columns:repeat(4,1fr);
-    gap:10px; margin:20px 0;
-  }
-
-  .memory-card {
-    aspect-ratio:1;
-    border-radius:10px;
-    cursor:pointer;
-    position:relative;
-    perspective:500px;
-    transition:transform .15s;
-  }
-  .memory-card:hover:not(.flipped):not(.matched) { transform:scale(1.05); }
-
-  .memory-front, .memory-back {
-    position:absolute; inset:0;
-    border-radius:10px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.6rem;
-    backface-visibility:hidden;
-    transition:transform .4s;
-  }
-
-  .memory-front {
-    background: linear-gradient(135deg, rgba(123,47,255,0.3), rgba(0,229,255,0.1));
-    border:1px solid rgba(123,47,255,0.4);
-    transform:rotateY(0deg);
-  }
-
-  .memory-back {
-    background:var(--card);
-    border:1px solid rgba(0,229,255,0.15);
-    transform:rotateY(180deg);
-    font-size:.7rem;
-    font-family:'Orbitron',sans-serif;
-    color:var(--accent); text-align:center; padding:4px;
-    letter-spacing:.03em;
-  }
-
-  .memory-card.flipped .memory-front { transform:rotateY(-180deg); }
-  .memory-card.flipped .memory-back { transform:rotateY(0deg); }
-  .memory-card.matched .memory-front { transform:rotateY(-180deg); }
-  .memory-card.matched .memory-back {
-    transform:rotateY(0deg);
-    background:rgba(0,255,136,0.1);
-    border-color:var(--green);
-  }
-
-  /* SCORE BADGE */
-  .score-badge {
-    display:inline-flex; align-items:center; gap:8px;
-    padding:8px 18px; border-radius:30px;
-    background:rgba(255,215,0,0.1);
-    border:1px solid rgba(255,215,0,0.3);
-    font-family:'Orbitron',sans-serif;
-    font-size:.7rem; color:var(--gold);
-    letter-spacing:.1em; margin-top:16px;
-  }
-
-  /* FINAL SECTION */
-  #final .content-card {
-    border-color:rgba(255,215,0,0.2);
-  }
-  #final .content-card::before {
-    background: linear-gradient(180deg, var(--gold), var(--accent2));
-  }
-
-  .final-cta {
-    text-align:center; padding:40px 20px;
-  }
-
-  .final-cta h2 {
-    font-family:'Orbitron',sans-serif;
-    font-size:clamp(1.4rem,4vw,2.2rem);
-    font-weight:900; margin-bottom:12px;
-    background:linear-gradient(135deg,var(--gold),var(--accent2));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  }
-
-  .final-cta p {
-    color:var(--muted); font-size:1rem; margin-bottom:28px;
-  }
-
-  .stars {
-    font-size:2rem; letter-spacing:.3em; margin-bottom:20px;
-    animation:float 3s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);}
-  }
-
-  /* GLOBAL SCORE */
-  #global-score {
-    position:fixed; top:20px; right:20px;
-    background:rgba(10,20,40,0.9);
-    border:1px solid rgba(255,215,0,0.3);
-    border-radius:12px; padding:10px 18px;
-    font-family:'Orbitron',sans-serif;
-    font-size:.7rem; color:var(--gold);
-    letter-spacing:.1em; z-index:100;
-    backdrop-filter:blur(10px);
-    transition:all .4s;
-  }
-
-  #global-score span { font-size:1.1rem; font-weight:700; }
-
-  /* RESPONSIVE */
-  @media(max-width:600px){
-    .memory-grid{ grid-template-columns:repeat(4,1fr); gap:6px; }
-    .memory-front, .memory-back { font-size:1.2rem; }
-    .section, .game-wrapper, .divider { padding-left:16px; padding-right:16px; }
-    .tf-btns { flex-direction:column; }
-  }
+:root {
+  --navy:    #0d2252;
+  --blue:    #1a4fa0;
+  --mid:     #1e6ec8;
+  --cyan:    #00aeef;
+  --sky:     #b3e4f9;
+  --orange:  #f5a623;
+  --amber:   #e8921a;
+  --white:   #ffffff;
+  --offwhite:#f0f6ff;
+  --light:   #e8f4fd;
+  --muted:   #6b8ab5;
+  --dark:    #071428;
+  --surface: #f4f9ff;
+  --border:  rgba(0,174,239,0.18);
+  --shadow:  0 4px 24px rgba(13,34,82,0.10);
+  --correct: #0ea87a;
+  --wrong:   #e0354b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--surface);color:var(--navy);font-family:'Inter',system-ui,sans-serif;overflow-x:hidden;line-height:1.6;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(var(--sky) 1px,transparent 1px);background-size:28px 28px;opacity:.35;pointer-events:none;z-index:0;}
+
+/* HERO */
+#hero{min-height:100vh;background:linear-gradient(160deg,var(--dark) 0%,var(--navy) 55%,var(--blue) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden;}
+#hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,174,239,.18) 0%,transparent 65%);top:-100px;right:-100px;animation:orb1 12s ease-in-out infinite;}
+#hero::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.12) 0%,transparent 65%);bottom:-80px;left:-60px;animation:orb2 10s ease-in-out infinite;}
+@keyframes orb1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,40px) scale(1.15);}}
+@keyframes orb2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-30px) scale(1.1);}}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,174,239,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,174,239,.06) 1px,transparent 1px);background-size:60px 60px;}
+.hero-logo{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,174,239,.5);box-shadow:0 0 0 6px rgba(0,174,239,.12),0 0 40px rgba(0,174,239,.3);margin-bottom:28px;animation:fadeUp .9s ease both;position:relative;z-index:2;}
+.hero-eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:var(--cyan);margin-bottom:20px;animation:fadeUp .9s .1s ease both;position:relative;z-index:2;}
+.hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3rem,9vw,7rem);line-height:.92;color:var(--white);letter-spacing:-.02em;animation:fadeUp .9s .2s ease both;position:relative;z-index:2;}
+.hero-title em{font-style:normal;color:var(--cyan);display:block;text-shadow:0 0 40px rgba(0,174,239,.5);}
+.hero-rule{width:56px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:2px;margin:28px auto;animation:fadeUp .9s .4s ease both;}
+.hero-author{font-size:1rem;font-weight:300;letter-spacing:.18em;color:rgba(255,255,255,.5);text-transform:uppercase;animation:fadeUp .9s .5s ease both;position:relative;z-index:2;}
+.hero-group{margin-top:20px;animation:fadeUp .9s .6s ease both;position:relative;z-index:2;}
+.hero-school{font-size:.72rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,174,239,.6);margin-bottom:8px;}
+.hero-names{font-size:.95rem;font-weight:500;color:rgba(255,255,255,.75);letter-spacing:.06em;}
+.hero-names span{color:var(--orange);}
+.hero-nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:48px;animation:fadeUp .9s .75s ease both;position:relative;z-index:2;}
+.hero-nav a{padding:9px 22px;border-radius:100px;border:1.5px solid rgba(0,174,239,.35);color:var(--cyan);font-size:.8rem;font-weight:600;letter-spacing:.08em;text-decoration:none;text-transform:uppercase;transition:all .3s;background:rgba(0,174,239,.06);backdrop-filter:blur(8px);}
+.hero-nav a:hover{background:rgba(0,174,239,.18);border-color:var(--cyan);box-shadow:0 0 20px rgba(0,174,239,.25);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* SECTIONS */
+.story-section{position:relative;z-index:1;}
+.section-visual{width:100%;overflow:hidden;background:var(--dark);}
+.section-visual svg{display:block;width:100%;max-height:480px;}
+.section-title-bar{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);padding:30px 40px 34px;text-align:center;position:relative;overflow:hidden;}
+.section-title-bar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--orange),var(--cyan));background-size:200% 100%;animation:shimmer 3s linear infinite;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.section-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(0,174,239,.15);border:1px solid rgba(0,174,239,.3);color:var(--cyan);border-radius:100px;font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:5px 14px;margin-bottom:12px;}
+.section-title-bar h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.6rem,4vw,2.8rem);color:var(--white);line-height:1.1;letter-spacing:-.01em;}
+
+/* SCRIPT PANELS */
+.script-panel{background:var(--dark);border-bottom:1px solid rgba(0,174,239,.15);position:relative;z-index:1;}
+.script-inner{max-width:880px;margin:0 auto;padding:22px 32px 26px;}
+.script-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.script-who{display:flex;align-items:center;gap:10px;font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);}
+.script-who::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);}
+.script-toggle{padding:8px 20px;border-radius:100px;border:1.5px solid rgba(0,174,239,.35);background:rgba(0,174,239,.06);color:var(--cyan);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.script-toggle:hover,.script-toggle.open{background:rgba(0,174,239,.18);border-color:var(--cyan);}
+.script-lines{margin-top:18px;padding:0;list-style:none;flex-direction:column;gap:10px;counter-reset:lc;}
+.script-lines li{display:flex;align-items:flex-start;gap:14px;padding:14px 18px 14px 16px;background:rgba(255,255,255,.03);border:1px solid rgba(0,174,239,.12);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;font-size:1rem;line-height:1.65;color:rgba(255,255,255,.82);counter-increment:lc;transition:background .2s;}
+.script-lines li:hover{background:rgba(0,174,239,.06);}
+.script-lines li::before{content:counter(lc);font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--cyan);min-width:20px;}
+.script-icon{font-size:1.15rem;line-height:1;margin-top:2px;}
+
+/* GAMES */
+.game-section{background:var(--offwhite);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:52px 24px;position:relative;z-index:1;}
+.game-section::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(-45deg,transparent,transparent 20px,rgba(0,174,239,.025) 20px,rgba(0,174,239,.025) 21px);}
+.game-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;}
+.game-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--blue),var(--mid));color:var(--white);border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:6px 18px;margin-bottom:14px;box-shadow:0 4px 14px rgba(30,110,200,.3);}
+.game-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.7rem;color:var(--navy);letter-spacing:-.01em;margin-bottom:5px;line-height:1.15;}
+.game-subtitle{font-size:.9rem;color:var(--muted);margin-bottom:24px;}
+.quiz-q{font-size:1.05rem;line-height:1.65;color:var(--navy);font-weight:600;background:var(--white);border:1px solid var(--border);border-left:4px solid var(--cyan);padding:14px 16px;border-radius:0 10px 10px 0;margin-bottom:16px;box-shadow:var(--shadow);}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.quiz-opt{padding:13px 18px;border-radius:10px;border:1.5px solid rgba(13,34,82,.1);background:var(--white);color:var(--navy);font-size:.95rem;cursor:pointer;text-align:left;transition:all .22s;font-weight:500;box-shadow:0 1px 4px rgba(13,34,82,.06);}
+.quiz-opt:hover:not(:disabled){background:var(--light);border-color:var(--cyan);transform:translateX(5px);box-shadow:0 2px 12px rgba(0,174,239,.15);}
+.quiz-opt.correct{background:rgba(14,168,122,.1);border-color:var(--correct);color:var(--correct);font-weight:700;}
+.quiz-opt.wrong{background:rgba(224,53,75,.1);border-color:var(--wrong);color:var(--wrong);}
+.quiz-opt:disabled{cursor:default;}
+.feedback{padding:12px 16px;border-radius:10px;font-size:.92rem;min-height:44px;margin-bottom:10px;font-weight:500;}
+.feedback.ok{background:rgba(14,168,122,.1);border:1.5px solid var(--correct);color:var(--correct);}
+.feedback.err{background:rgba(224,53,75,.1);border:1.5px solid var(--wrong);color:var(--wrong);}
+.btn-next{padding:12px 30px;border-radius:100px;border:none;background:linear-gradient(135deg,var(--blue),var(--cyan));color:var(--white);font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:6px;box-shadow:0 4px 18px rgba(30,110,200,.35);}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(30,110,200,.4);}
+.tf-prog{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.tf-stat{font-size:1.05rem;line-height:1.7;font-weight:600;background:var(--white);border:1px solid var(--border);border-left:4px solid var(--orange);padding:16px 18px;border-radius:0 10px 10px 0;color:var(--navy);margin-bottom:18px;min-height:68px;box-shadow:var(--shadow);}
+.tf-row{display:flex;gap:12px;flex-wrap:wrap;}
+.tf-btn{flex:1;min-width:120px;padding:16px;border-radius:12px;border:none;cursor:pointer;font-size:.92rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;transition:all .25s;}
+.tf-btn.t{background:rgba(14,168,122,.1);border:2px solid var(--correct);color:var(--correct);}
+.tf-btn.f{background:rgba(224,53,75,.1);border:2px solid var(--wrong);color:var(--wrong);}
+.tf-btn:hover:not(:disabled){filter:brightness(1.1);transform:scale(1.03);}
+.tf-btn:disabled{opacity:.45;cursor:default;}
+.scr-word{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,7vw,3.2rem);letter-spacing:.28em;color:var(--blue);text-align:center;background:var(--white);border:2px dashed rgba(0,174,239,.35);padding:22px;border-radius:12px;margin:16px 0;box-shadow:var(--shadow);}
+.scr-hint{font-style:italic;color:var(--muted);font-size:.88rem;text-align:center;margin-bottom:16px;}
+.scr-input{width:100%;padding:14px 20px;border-radius:12px;border:2px solid rgba(0,174,239,.25);background:var(--white);font-family:'Syne',sans-serif;font-size:1.1rem;text-align:center;text-transform:uppercase;letter-spacing:.22em;outline:none;color:var(--navy);transition:border .3s;margin-bottom:10px;box-shadow:var(--shadow);}
+.scr-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,174,239,.12);}
+.scr-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-skip{padding:12px 24px;border-radius:100px;border:1.5px solid var(--border);background:var(--white);color:var(--muted);font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.btn-skip:hover{border-color:var(--muted);color:var(--navy);}
+.mem-stats{display:flex;gap:24px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.mem-stats b{color:var(--navy);}
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0;}
+.mem-card{aspect-ratio:1;cursor:pointer;position:relative;border-radius:10px;transition:transform .15s;user-select:none;}
+.mem-card:hover:not(.flipped):not(.matched){transform:scale(1.06);}
+.mem-f,.mem-b{position:absolute;inset:0;border-radius:10px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;transition:transform .4s;}
+.mem-f{background:linear-gradient(135deg,var(--navy),var(--blue));font-size:1.6rem;border:2px solid rgba(0,174,239,.3);color:var(--white);transform:rotateY(0);}
+.mem-b{background:var(--white);border:2px solid var(--cyan);font-family:'Syne',sans-serif;font-size:.58rem;font-weight:800;text-align:center;padding:6px;color:var(--navy);transform:rotateY(180deg);letter-spacing:.04em;line-height:1.3;}
+.mem-card.flipped .mem-f{transform:rotateY(-180deg);}
+.mem-card.flipped .mem-b{transform:rotateY(0);}
+.mem-card.matched .mem-f{transform:rotateY(-180deg);}
+.mem-card.matched .mem-b{transform:rotateY(0);background:rgba(14,168,122,.1);border-color:var(--correct);color:var(--correct);}
+#score-pill{position:fixed;top:18px;right:18px;z-index:999;background:linear-gradient(135deg,var(--navy),var(--blue));color:var(--orange);padding:9px 20px;border-radius:100px;font-size:.82rem;font-weight:800;letter-spacing:.06em;border:1.5px solid rgba(0,174,239,.3);box-shadow:0 4px 20px rgba(13,34,82,.3);}
+#score-pill span{font-size:1rem;}
+.finale{background:linear-gradient(160deg,var(--dark),var(--navy) 60%,var(--blue));color:var(--white);padding:90px 24px;text-align:center;position:relative;overflow:hidden;z-index:1;}
+.finale::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(0,174,239,.1) 1px,transparent 1px);background-size:30px 30px;}
+.finale h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.02em;color:var(--cyan);margin-bottom:14px;position:relative;z-index:1;}
+.finale p{font-size:1rem;color:rgba(255,255,255,.6);position:relative;z-index:1;}
+.finale .big-pts{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:var(--orange);margin:22px 0;position:relative;z-index:1;text-shadow:0 0 30px rgba(245,166,35,.4);}
+@media(max-width:600px){.section-title-bar{padding:22px 20px 26px;}.game-section{padding:38px 16px;}.mem-f{font-size:1.1rem;}.tf-row{flex-direction:column;}.script-inner{padding:18px 16px 22px;}.script-lines li{font-size:.92rem;}.hero-names{font-size:.82rem;}}
 </style>
 </head>
 <body>
 
-<div id="global-score">⭐ Pontos: <span id="pts">0</span></div>
+<div id="score-pill">&#11088; Score: <span id="pts">0</span></div>
 
-<!-- HERO -->
 <section id="hero">
-  <div class="hero-eyebrow">📚 Feira Literária · Norman Whitney</div>
-  <h1 class="hero-title">A Máquina<br>da Verdade</h1>
-  <p class="hero-sub">Uma aventura sobre liberdade, tecnologia e escolhas</p>
-  <p class="hero-author">The Truth Machine</p>
-  <div class="scan-line"></div>
-  <nav class="nav-dots">
-    <a class="nav-dot" href="#intro">Introdução</a>
-    <a class="nav-dot" href="#cap1">Capítulo 1</a>
-    <a class="nav-dot" href="#cap2">Capítulo 2</a>
-    <a class="nav-dot" href="#cap3">Capítulo 3</a>
-    <a class="nav-dot" href="#final">Parte Final</a>
+  <div class="hero-grid"></div>
+  <img src="data:image/png;base64,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" alt="CPK Santos" class="hero-logo">
+  <p class="hero-eyebrow">Literary Fair &#183; Norman Whitney</p>
+  <h1 class="hero-title">The Truth<em>Machine</em></h1>
+  <div class="hero-rule"></div>
+  <p class="hero-author">A story about truth, lies &amp; consequences</p>
+  <div class="hero-group">
+    <p class="hero-school">Col&#233;gio Presidente Kennedy &#183; Santos</p>
+    <p class="hero-names">
+      <span>Lucas Peres</span>&nbsp;&#183;&nbsp;<span>Vittor Soares</span>&nbsp;&#183;&nbsp;<span>Marina Vital</span>&nbsp;&#183;&nbsp;<span>Victoria Abdala</span>
+    </p>
+  </div>
+  <nav class="hero-nav">
+    <a href="#s-intro">Introduction</a>
+    <a href="#s-ch1">Chapter 1</a>
+    <a href="#s-ch2">Chapter 2</a>
+    <a href="#s-ch3">Chapter 3</a>
+    <a href="#s-final">The End</a>
   </nav>
 </section>
 
-<!-- ===== INTRODUÇÃO ===== -->
-<section id="intro" class="section">
-  <div class="section-header">
-    <div class="section-num">00</div>
-    <div class="section-label">
-      <span class="section-tag">📖 Início da história</span>
-      <h2 class="section-title">Introdução</h2>
-    </div>
-  </div>
-  <div class="content-card">
-    <p>Imagina que existe uma máquina capaz de descobrir se você está dizendo a verdade ou mentindo. Parece coisa de filme, né? É exatamente esse o mundo de <strong>The Truth Machine</strong>!</p>
-    <div class="highlight-box">💡 "E se ninguém no mundo pudesse mentir nunca mais?"</div>
-    <p>A história se passa em uma cidade com muitos problemas de segurança. As pessoas tinham medo, os crimes aconteciam com frequência e as autoridades precisavam de uma solução. Foi então que surgiu a ideia mais radical de todas: criar uma máquina que detectasse mentiras com 100% de precisão.</p>
-    <p>Parece incrível, né? Mas será que um mundo sem mentiras seria realmente melhor? Essa é a grande pergunta que o livro faz logo no começo — e a resposta vai te surpreender!</p>
-    <div class="char-list">
-      <span class="char-tag a">🏙️ Cidade em crise</span>
-      <span class="char-tag b">🤖 Tecnologia avançada</span>
-      <span class="char-tag c">❓ Grandes perguntas</span>
-    </div>
-  </div>
-</section>
+<!-- ── INTRO ── -->
+<div class="story-section" id="s-intro">
+  <div class="section-visual"><svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg0" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071428"/>
+      <stop offset="100%" stop-color="#0d2252"/>
+    </linearGradient>
+    <radialGradient id="glow0" cx="55%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#00aeef" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="f0"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="960" height="400" fill="url(#bg0)"/>
+  <rect width="960" height="400" fill="url(#glow0)"/>
+  <!-- grid -->
+  <line x1="0" y1="200" x2="960" y2="200" stroke="#1e6ec8" stroke-width=".4" opacity=".3"/>
+  <line x1="480" y1="0" x2="480" y2="400" stroke="#1e6ec8" stroke-width=".4" opacity=".3"/>
 
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">⚙️</div><div class="divider-line"></div></div>
+  <!-- BOOKSHELF left -->
+  <rect x="30" y="40" width="110" height="340" rx="4" fill="#0a1c3a"/>
+  <rect x="30" y="40" width="110" height="8" fill="#1a4fa0"/>
+  <rect x="30" y="112" width="110" height="6" fill="#1a4fa0"/>
+  <rect x="30" y="184" width="110" height="6" fill="#1a4fa0"/>
+  <rect x="30" y="256" width="110" height="6" fill="#1a4fa0"/>
+  <rect x="30" y="328" width="110" height="6" fill="#1a4fa0"/>
+  <!-- books row 1 -->
+  <rect x="34" y="50" width="14" height="58" rx="1" fill="#00aeef"/>
+  <rect x="50" y="54" width="10" height="54" rx="1" fill="#f5a623"/>
+  <rect x="62" y="50" width="16" height="58" rx="1" fill="#1e6ec8"/>
+  <rect x="80" y="54" width="12" height="54" rx="1" fill="#0ea87a"/>
+  <rect x="94" y="50" width="14" height="58" rx="1" fill="#f5a623"/>
+  <rect x="110" y="54" width="10" height="54" rx="1" fill="#00aeef"/>
+  <!-- books row 2 -->
+  <rect x="34" y="120" width="12" height="58" rx="1" fill="#f5a623"/>
+  <rect x="48" y="122" width="16" height="56" rx="1" fill="#1e6ec8"/>
+  <rect x="66" y="120" width="10" height="58" rx="1" fill="#00aeef"/>
+  <rect x="78" y="124" width="14" height="54" rx="1" fill="#0ea87a"/>
+  <rect x="94" y="120" width="12" height="58" rx="1" fill="#f5a623"/>
+  <rect x="108" y="124" width="14" height="54" rx="1" fill="#1e6ec8"/>
+  <!-- books row 3 -->
+  <rect x="34" y="192" width="16" height="58" rx="1" fill="#00aeef"/>
+  <rect x="52" y="196" width="10" height="54" rx="1" fill="#f5a623"/>
+  <rect x="64" y="192" width="14" height="58" rx="1" fill="#1a4fa0"/>
+  <rect x="80" y="196" width="12" height="54" rx="1" fill="#0ea87a"/>
+  <rect x="94" y="192" width="10" height="58" rx="1" fill="#00aeef"/>
+  <rect x="106" y="196" width="14" height="54" rx="1" fill="#f5a623"/>
 
-<!-- MINI GAME 1 -->
-<div class="game-wrapper">
-  <div class="game-card">
-    <div class="game-title">🎮 Mini Game #1 — Após a Introdução</div>
-    <div class="game-name">Verdade ou Mentira?</div>
-    <div class="tf-score" id="tf-score">Pergunta <span id="tf-q">1</span> de 4 · Pontos: <span id="tf-pts">0</span></div>
-    <p class="tf-statement" id="tf-statement">Carregando...</p>
-    <div class="quiz-feedback" id="tf-feedback"></div>
-    <div class="tf-btns">
-      <button class="tf-btn verdade" onclick="tfAnswer(true)">✅ VERDADE</button>
-      <button class="tf-btn mentira" onclick="tfAnswer(false)">❌ MENTIRA</button>
+  <!-- LAB BENCH -->
+  <rect x="160" y="300" width="700" height="18" rx="4" fill="#1a4fa0"/>
+  <rect x="160" y="318" width="700" height="60" fill="#0d2252"/>
+  <rect x="200" y="318" width="14" height="60" fill="#0a1835"/>
+  <rect x="820" y="318" width="14" height="60" fill="#0a1835"/>
+
+  <!-- TRUTH MACHINE - centrepiece -->
+  <rect x="440" y="180" width="220" height="120" rx="10" fill="#0a1c3a" stroke="#00aeef" stroke-width="2"/>
+  <rect x="452" y="192" width="196" height="90" rx="6" fill="#061018"/>
+  <!-- screen -->
+  <rect x="462" y="200" width="120" height="70" rx="4" fill="#001a0a"/>
+  <text x="522" y="226" text-anchor="middle" font-family="monospace" font-size="9" fill="#00cc44">SCANNING...</text>
+  <text x="522" y="248" text-anchor="middle" font-family="monospace" font-size="16" fill="#00ff77" filter="url(#f0)">TRUTH</text>
+  <text x="522" y="262" text-anchor="middle" font-family="monospace" font-size="7" fill="#009933">VERIFIED</text>
+  <!-- dials -->
+  <circle cx="610" cy="220" r="16" fill="#061018" stroke="#00aeef" stroke-width="1.5"/>
+  <line x1="610" y1="220" x2="610" y2="206" stroke="#00aeef" stroke-width="2" filter="url(#f0)"/>
+  <circle cx="636" cy="250" r="12" fill="#061018" stroke="#f5a623" stroke-width="1.5"/>
+  <line x1="636" y1="250" x2="644" y2="242" stroke="#f5a623" stroke-width="2"/>
+  <!-- machine glow -->
+  <ellipse cx="550" cy="320" rx="130" ry="20" fill="rgba(0,174,239,.08)"/>
+
+  <!-- PROFESSOR VERITY -->
+  <!-- body/coat -->
+  <path d="M300 390 L300 260 Q320 248 350 246 Q380 248 400 260 L400 390Z" fill="#e8f0f8"/>
+  <path d="M310 260 L306 360 L300 360Z" fill="#c8d8e8"/>
+  <path d="M390 260 L394 360 L400 360Z" fill="#c8d8e8"/>
+  <!-- shirt + tie -->
+  <rect x="340" y="248" width="20" height="60" rx="2" fill="#1e6ec8"/>
+  <path d="M347 250 l6 0 l3 28 l-6 8 l-6-8 Z" fill="#0d2252"/>
+  <!-- head -->
+  <ellipse cx="350" cy="210" rx="36" ry="42" fill="#d4a97a"/>
+  <!-- hair -->
+  <path d="M314 200 Q316 165 350 168 Q384 165 386 200 Q380 180 350 183 Q320 180 314 200Z" fill="#2a1a08"/>
+  <!-- glasses -->
+  <circle cx="338" cy="212" r="10" fill="none" stroke="#f5a623" stroke-width="2"/>
+  <circle cx="362" cy="212" r="10" fill="none" stroke="#f5a623" stroke-width="2"/>
+  <line x1="348" y1="212" x2="352" y2="212" stroke="#f5a623" stroke-width="2"/>
+  <circle cx="338" cy="212" r="4" fill="#1a0800"/>
+  <circle cx="362" cy="212" r="4" fill="#1a0800"/>
+  <path d="M342 226 Q350 231 358 226" stroke="#8b6040" stroke-width="1.5" fill="none"/>
+  <!-- arms -->
+  <path d="M300 270 Q272 308 268 355" stroke="#e8f0f8" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <path d="M400 270 Q428 308 432 348" stroke="#e8f0f8" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <ellipse cx="266" cy="360" rx="16" ry="12" fill="#d4a97a"/>
+  <ellipse cx="434" cy="354" rx="16" ry="12" fill="#d4a97a"/>
+
+  <!-- NEWSPAPER floating -->
+  <rect x="600" y="160" width="150" height="110" rx="4" fill="#f0eedc" transform="rotate(-7,675,215)"/>
+  <rect x="608" y="168" width="134" height="14" rx="2" fill="#0d2252" transform="rotate(-7,675,215)"/>
+  <text x="612" y="180" font-family="Georgia,serif" font-size="9" fill="#f0f6ff" transform="rotate(-7,675,215)">DAILY GAZETTE</text>
+  <rect x="608" y="185" width="90" height="5" rx="1" fill="#f5a623" transform="rotate(-7,675,215)"/>
+  <text x="608" y="191" font-family="Georgia,serif" font-size="7" fill="#1a4fa0" transform="rotate(-7,675,215)">THE TRUTH MACHINE</text>
+  <rect x="608" y="195" width="130" height="2" rx="1" fill="#aaa" transform="rotate(-7,675,215)"/>
+  <rect x="608" y="201" width="130" height="2" rx="1" fill="#aaa" transform="rotate(-7,675,215)"/>
+  <rect x="608" y="207" width="100" height="2" rx="1" fill="#aaa" transform="rotate(-7,675,215)"/>
+  <rect x="608" y="213" width="120" height="2" rx="1" fill="#aaa" transform="rotate(-7,675,215)"/>
+  <rect x="608" y="219" width="80" height="2" rx="1" fill="#aaa" transform="rotate(-7,675,215)"/>
+
+  <!-- labels -->
+  <rect x="280" y="138" width="140" height="28" rx="14" fill="rgba(0,174,239,.85)"/>
+  <text x="350" y="157" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="white" font-weight="700">Prof. Verity</text>
+  <rect x="465" y="142" width="170" height="28" rx="14" fill="rgba(245,166,35,.85)"/>
+  <text x="550" y="161" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#071428" font-weight="700">Truth Machine</text>
+</svg></div>
+  <div class="section-title-bar">
+    <div class="section-tag">&#129514; Section 1 &middot; Introduction</div>
+    <h2>Professor Verity &amp; His Invention</h2>
+  </div>
+</div>
+<div class="script-panel">
+  <div class="script-inner">
+    <div class="script-header">
+      <span class="script-who">🎤 Lucas &nbsp;·&nbsp; Professor Verity</span>
+      <button class="script-toggle" onclick="toggleScript('intro')">Show Script &#9662;</button>
     </div>
-    <button class="game-btn" id="tf-next" onclick="tfNext()" style="display:none">Próxima →</button>
+    <ol class="script-lines" id="lines-intro" style="display:none"><li><span class="script-icon">🧪</span>Professor Verity built the Truth Machine — a device that can reveal any secret.</li><li><span class="script-icon">👁️</span>He hated lies. He believed truth should rule the world.</li><li><span class="script-icon">📰</span>The machine became world-famous. Newspapers wrote about it. Hundreds of people wrote letters asking for help.</li><li><span class="script-icon">👥</span>He chose only three visitors: Mrs Seeker, Inspector Sack, and Dr Simple.</li></ol>
+  </div>
+</div>
+<div class="game-section">
+  <div class="game-inner">
+    <div class="game-badge">&#127918; Mini Game 1</div>
+    <div class="game-title">True or False?</div>
+    <div class="game-subtitle">Test what you know about Professor Verity!</div>
+    <div class="tf-prog">Question <span id="tf-qn">1</span> of 2 &nbsp;&middot;&nbsp; Score: <span id="tf-sc">0</span></div>
+    <div class="tf-stat" id="tf-stat"></div>
+    <div class="feedback" id="tf-fb"></div>
+    <div class="tf-row">
+      <button class="tf-btn t" onclick="tfAns(true)">&#9989; TRUE</button>
+      <button class="tf-btn f" onclick="tfAns(false)">&#10060; FALSE</button>
+    </div>
+    <button class="btn-next" id="tf-nxt" onclick="tfNext()" style="display:none;margin-top:14px">Next &#8594;</button>
   </div>
 </div>
 
-<!-- ===== CAPÍTULO 1 ===== -->
-<section id="cap1" class="section">
-  <div class="section-header">
-    <div class="section-num">01</div>
-    <div class="section-label">
-      <span class="section-tag">📖 Capítulo Um</span>
-      <h2 class="section-title">A Máquina é Apresentada</h2>
-    </div>
-  </div>
-  <div class="content-card">
-    <p>No primeiro capítulo, somos apresentados aos personagens principais e ao funcionamento da Máquina da Verdade. A máquina é instalada em lugares públicos importantes da cidade — delegacias, tribunais e até escolas.</p>
-    <p>Quando alguém fala perto dela, a máquina analisa a voz, os batimentos cardíacos e até as expressões do rosto. Em segundos, ela exibe na tela: <strong style="color:var(--green)">VERDADE</strong> ou <strong style="color:var(--red)">MENTIRA</strong>.</p>
-    <div class="highlight-box">🔬 A máquina funciona como um detetive eletrônico que nunca erra... ou será que erra?</div>
-    <p>No começo, as pessoas ficam empolgadas! Os crimes diminuem, porque ninguém consegue mentir para a polícia. Os julgamentos ficam mais rápidos. Mas logo surgem os primeiros problemas...</p>
-    <div class="char-list">
-      <span class="char-tag a">👮 Autoridades</span>
-      <span class="char-tag b">😨 Cidadãos com medo</span>
-      <span class="char-tag c">🎤 Detector de voz</span>
-    </div>
-  </div>
-</section>
+<!-- ── CHAPTER 1 ── -->
+<div class="story-section" id="s-ch1">
+  <div class="section-visual"><svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1e0a"/>
+      <stop offset="100%" stop-color="#050d04"/>
+    </linearGradient>
+    <filter id="f1"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="960" height="400" fill="#0a1828"/>
+  <!-- floor -->
+  <rect x="0" y="330" width="960" height="70" fill="#060e18"/>
+  <!-- wall panelling -->
+  <rect x="0" y="0" width="960" height="330" fill="#0d1e35"/>
+  <rect x="20" y="20" width="920" height="290" fill="none" stroke="#1a3a60" stroke-width="1" opacity=".5"/>
+  <rect x="35" y="35" width="890" height="260" fill="none" stroke="#1a3a60" stroke-width=".5" opacity=".4"/>
+  <!-- door centre -->
+  <rect x="415" y="130" width="130" height="200" rx="3" fill="#061018" stroke="#1a4fa0" stroke-width="3"/>
+  <rect x="420" y="135" width="120" height="190" rx="2" fill="#071428"/>
+  <circle cx="530" cy="240" r="7" fill="#f5a623"/>
+  <ellipse cx="480" cy="140" rx="65" ry="15" fill="rgba(0,174,239,.06)" filter="url(#f1)"/>
 
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">🔍</div><div class="divider-line"></div></div>
+  <!-- envelope pile right -->
+  <rect x="720" y="256" width="120" height="80" rx="4" fill="#0a1828"/>
+  <rect x="724" y="260" width="112" height="72" rx="3" fill="#e8dcc0"/>
+  <line x1="724" y1="260" x2="780" y2="300" stroke="#1a4fa0" stroke-width="1.5"/>
+  <line x1="836" y1="260" x2="780" y2="300" stroke="#1a4fa0" stroke-width="1.5"/>
+  <rect x="734" y="270" width="60" height="38" rx="2" fill="#f5f0e0" transform="rotate(-5,764,289)"/>
+  <text x="738" y="287" font-family="Georgia,serif" font-size="8" fill="#8b6343" transform="rotate(-5,764,289)">Mrs Seeker</text>
+  <rect x="800" y="268" width="58" height="38" rx="2" fill="#f5f0e0" transform="rotate(4,829,287)"/>
+  <text x="804" y="285" font-family="Georgia,serif" font-size="8" fill="#8b6343" transform="rotate(4,829,287)">Insp. Sack</text>
 
-<!-- MINI GAME 2 -->
-<div class="game-wrapper">
-  <div class="game-card">
-    <div class="game-title">🎮 Mini Game #2 — Após o Capítulo 1</div>
-    <div class="game-name">Quiz: Você Conhece a Máquina?</div>
-    <p class="quiz-question" id="q2-text">Carregando...</p>
-    <div class="quiz-options" id="q2-options"></div>
-    <div class="quiz-feedback" id="q2-feedback"></div>
-    <button class="game-btn" id="q2-next" onclick="q2Next()" style="display:none">Próxima Pergunta →</button>
-    <div id="q2-score" class="score-badge" style="display:none">⭐ Quiz concluído!</div>
+  <!-- MRS SEEKER – left -->
+  <path d="M120 390 L120 262 Q138 252 168 250 Q198 252 216 262 L216 390Z" fill="#8b2040"/>
+  <path d="M130 263 L126 355 L120 355Z" fill="#6a1830"/>
+  <path d="M206 263 L210 355 L216 355Z" fill="#6a1830"/>
+  <ellipse cx="168" cy="216" rx="32" ry="38" fill="#d4a97a"/>
+  <path d="M136 206 Q142 176 168 179 Q194 176 200 206 Q196 190 168 193 Q140 190 136 206Z" fill="#3d1a0a"/>
+  <ellipse cx="168" cy="193" rx="36" ry="9" fill="#b5451b"/>
+  <rect x="155" y="180" width="26" height="16" rx="3" fill="#8b3210"/>
+  <circle cx="158" cy="214" r="4" fill="#fff"/>
+  <circle cx="178" cy="214" r="4" fill="#fff"/>
+  <circle cx="159" cy="215" r="2" fill="#1a0800"/>
+  <circle cx="179" cy="215" r="2" fill="#1a0800"/>
+  <ellipse cx="168" cy="228" rx="6" ry="7" fill="#7a1a1a"/>
+  <path d="M120 272 Q100 318 96 362" stroke="#8b2040" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <path d="M216 272 Q236 308 242 350" stroke="#8b2040" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <ellipse cx="94" cy="368" rx="15" ry="11" fill="#d4a97a"/>
+  <ellipse cx="244" cy="356" rx="15" ry="11" fill="#d4a97a"/>
+
+  <!-- INSPECTOR SACK – centre-left -->
+  <path d="M380 390 L380 262 Q400 250 435 248 Q470 250 490 262 L490 390Z" fill="#1a2a5a"/>
+  <ellipse cx="435" cy="213" rx="34" ry="40" fill="#c49a6c"/>
+  <rect x="401" y="188" width="68" height="12" rx="3" fill="#1a2a5a"/>
+  <rect x="406" y="174" width="58" height="20" rx="4" fill="#1a2a5a"/>
+  <rect x="416" y="172" width="38" height="8" fill="#f5a623"/>
+  <circle cx="424" cy="210" r="4" fill="#0d0a05"/>
+  <circle cx="445" cy="210" r="4" fill="#0d0a05"/>
+  <path d="M424 222 Q435 227 447 222" fill="#3d2010" stroke="#2d1508" stroke-width=".8"/>
+  <circle cx="435" cy="268" r="4" fill="#f5a623"/>
+  <circle cx="435" cy="288" r="4" fill="#f5a623"/>
+  <circle cx="435" cy="308" r="4" fill="#f5a623"/>
+  <rect x="446" y="256" width="24" height="18" rx="3" fill="#f5a623"/>
+  <text x="451" y="269" font-family="monospace" font-size="7" fill="#1a2a5a">INS</text>
+  <path d="M380 272 Q358 316 354 362" stroke="#1a2a5a" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <path d="M490 272 Q512 310 518 354" stroke="#1a2a5a" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <ellipse cx="352" cy="368" rx="15" ry="11" fill="#c49a6c"/>
+  <ellipse cx="520" cy="360" rx="15" ry="11" fill="#c49a6c"/>
+
+  <!-- DR SIMPLE – right -->
+  <path d="M640 390 L640 266 Q658 256 688 254 Q718 256 736 266 L736 390Z" fill="#2d2818"/>
+  <path d="M650 266 L646 358 L640 358Z" fill="#221e10"/>
+  <path d="M726 266 L730 358 L736 358Z" fill="#221e10"/>
+  <ellipse cx="688" cy="222" rx="30" ry="35" fill="#b8956a"/>
+  <path d="M658 213 Q664 187 688 190 Q712 187 718 213" fill="#1a0808"/>
+  <rect x="668" y="218" width="40" height="11" rx="5" fill="#0d0d0d"/>
+  <path d="M640 276 Q618 316 614 358" stroke="#2d2818" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <path d="M736 276 Q758 310 762 352" stroke="#2d2818" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <!-- spy folder -->
+  <rect x="760" y="200" width="54" height="42" rx="3" fill="#8b1a1a" transform="rotate(10,787,221)"/>
+  <text x="764" y="217" font-family="Georgia,serif" font-size="7" fill="#f5ede0" transform="rotate(10,787,221)">TOP SECRET</text>
+
+  <!-- name badges -->
+  <rect x="94" y="138" width="148" height="30" rx="15" fill="rgba(0,174,239,.9)"/>
+  <text x="168" y="158" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="white" font-weight="700">Mrs Seeker</text>
+  <rect x="358" y="126" width="154" height="30" rx="15" fill="rgba(30,110,200,.9)"/>
+  <text x="435" y="146" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="white" font-weight="700">Inspector Sack</text>
+  <rect x="614" y="138" width="148" height="30" rx="15" fill="rgba(45,40,24,.9)" stroke="#f5a623" stroke-width="1.5"/>
+  <text x="688" y="158" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#f5a623" font-weight="700">Dr Simple</text>
+</svg></div>
+  <div class="section-title-bar">
+    <div class="section-tag">&#128148; Section 2 &middot; Chapter 1</div>
+    <h2>Three Visitors, Three Wishes</h2>
+  </div>
+</div>
+<div class="script-panel">
+  <div class="script-inner">
+    <div class="script-header">
+      <span class="script-who">🎤 Marina &nbsp;·&nbsp; Mrs Seeker</span>
+      <button class="script-toggle" onclick="toggleScript('ch1')">Show Script &#9662;</button>
+    </div>
+    <ol class="script-lines" id="lines-ch1" style="display:none"><li><span class="script-icon">❤️</span>Mrs Seeker wanted to know if her husband still loved her.</li><li><span class="script-icon">⚡</span>The Truth Machine revealed the cruel answer...</li><li><span class="script-icon">💔</span>Her husband did not love her anymore. He loved her best friend.</li><li><span class="script-icon">😨</span>Mrs Seeker left the lab broken. Sometimes, the truth is worse than a lie.</li></ol>
+  </div>
+</div>
+<div class="game-section">
+  <div class="game-inner">
+    <div class="game-badge">&#127918; Mini Game 2</div>
+    <div class="game-title">Who Wanted What?</div>
+    <div class="game-subtitle">Match the visitor to their reason for coming.</div>
+    <p class="quiz-q" id="g2-q"></p>
+    <div class="quiz-opts" id="g2-opts"></div>
+    <div class="feedback" id="g2-fb"></div>
+    <button class="btn-next" id="g2-nxt" onclick="g2Next()" style="display:none">Next &#8594;</button>
+    <div id="g2-end" style="display:none;font-size:.95rem;font-weight:600;color:var(--correct);margin-top:8px"></div>
   </div>
 </div>
 
-<!-- ===== CAPÍTULO 2 ===== -->
-<section id="cap2" class="section">
-  <div class="section-header">
-    <div class="section-num">02</div>
-    <div class="section-label">
-      <span class="section-tag">📖 Capítulo Dois</span>
-      <h2 class="section-title">Os Problemas Começam</h2>
-    </div>
-  </div>
-  <div class="content-card">
-    <p>É aqui que a história fica mais emocionante! Os personagens começam a perceber que a Máquina da Verdade, mesmo sendo muito poderosa, causa problemas que ninguém esperava.</p>
-    <p>Um dos dilemas mais interessantes: e as mentiras do bem? Como quando você diz ao seu amigo que o desenho dele ficou bonito para não magoá-lo, mesmo que ache que poderia ser melhor. Isso é errado?</p>
-    <div class="highlight-box">💭 Existe diferença entre uma mentira cruel e uma mentira gentil?</div>
-    <p>Além disso, as pessoas começam a sentir que estão sendo <strong>vigiadas o tempo todo</strong>. Elas não podem mais guardar segredos, nem surpresas de aniversário, nem sentimentos pessoais. A liberdade começa a desaparecer...</p>
-    <p>Alguns personagens se rebelam. Outros defendem a máquina. E o leitor fica no meio, torcendo e pensando: quem está certo?</p>
-    <div class="char-list">
-      <span class="char-tag a">😤 Rebeldes</span>
-      <span class="char-tag b">🛡️ Defensores</span>
-      <span class="char-tag c">💔 Dilemas morais</span>
-    </div>
-  </div>
-</section>
+<!-- ── CHAPTER 2 ── -->
+<div class="story-section" id="s-ch2">
+  <div class="section-visual"><svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg2" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#1a0808"/>
+      <stop offset="100%" stop-color="#080404"/>
+    </radialGradient>
+    <filter id="rf"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="gf"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="960" height="400" fill="url(#bg2)"/>
+  <rect x="0" y="340" width="960" height="60" fill="#050303"/>
+  <!-- fire glow -->
+  <ellipse cx="480" cy="280" rx="220" ry="90" fill="rgba(255,80,0,.12)" filter="url(#rf)"/>
+  <ellipse cx="480" cy="260" rx="130" ry="55" fill="rgba(255,180,0,.08)" filter="url(#rf)"/>
 
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">🧩</div><div class="divider-line"></div></div>
+  <!-- MACHINE broken centre -->
+  <rect x="360" y="170" width="240" height="140" rx="8" fill="#0e1a0e" stroke="#444" stroke-width="2" opacity=".8"/>
+  <path d="M390 170 L430 270 L408 310" stroke="#ff4400" stroke-width="2.5" fill="none" opacity=".9"/>
+  <path d="M540 178 L508 268 L530 308" stroke="#ff4400" stroke-width="2.5" fill="none" opacity=".9"/>
+  <path d="M360 248 L480 233 L600 256" stroke="#ff4400" stroke-width="1.5" fill="none" opacity=".7"/>
+  <rect x="373" y="182" width="150" height="88" rx="4" fill="#020602"/>
+  <path d="M373 182 L523 270 M523 182 L373 270 M373 225 L523 225" stroke="#333" stroke-width="1" opacity=".7"/>
+  <circle cx="480" cy="215" r="4" fill="#ffcc00" filter="url(#gf)"/>
+  <circle cx="458" cy="235" r="2.5" fill="#ff8800" filter="url(#gf)"/>
+  <circle cx="502" cy="228" r="3" fill="#ffcc00" filter="url(#gf)"/>
+  <!-- shards -->
+  <polygon points="560,148 582,126 578,155" fill="#334" opacity=".9"/>
+  <polygon points="596,120 612,100 609,128" fill="#2a3a4a" opacity=".8"/>
+  <polygon points="380,144 360,122 373,150" fill="#334" opacity=".9"/>
 
-<!-- MINI GAME 3 - SCRAMBLE -->
-<div class="game-wrapper">
-  <div class="game-card">
-    <div class="game-title">🎮 Mini Game #3 — Após o Capítulo 2</div>
-    <div class="game-name">Desembaralha a Palavra!</div>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:4px">Descubra palavras-chave do livro a partir das letras embaralhadas.</p>
-    <div class="scramble-word" id="scr-word"></div>
-    <p class="scramble-hint" id="scr-hint"></p>
-    <input class="scramble-input" id="scr-input" type="text" placeholder="DIGITE AQUI..." maxlength="20" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')scrCheck()">
-    <div class="quiz-feedback" id="scr-feedback"></div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <button class="game-btn" onclick="scrCheck()">Confirmar ✓</button>
-      <button class="game-btn" onclick="scrSkip()" style="background:rgba(255,255,255,0.1);box-shadow:none;">Pular →</button>
+  <!-- MRS SEEKER shocked LEFT -->
+  <path d="M100 390 L100 264 Q118 252 148 250 Q178 252 196 264 L196 390Z" fill="#7a2040"/>
+  <ellipse cx="148" cy="218" rx="30" ry="36" fill="#d4a97a"/>
+  <path d="M118 208 Q124 180 148 183 Q172 180 178 208 Q174 194 148 196 Q122 194 118 208Z" fill="#3d1a0a"/>
+  <ellipse cx="148" cy="193" rx="32" ry="8" fill="#b5451b"/>
+  <rect x="136" y="181" width="24" height="14" rx="3" fill="#8b3210"/>
+  <circle cx="139" cy="216" r="6" fill="white"/>
+  <circle cx="158" cy="216" r="6" fill="white"/>
+  <circle cx="140" cy="217" r="3" fill="#1a0800"/>
+  <circle cx="159" cy="217" r="3" fill="#1a0800"/>
+  <ellipse cx="148" cy="232" rx="8" ry="10" fill="#7a1a1a"/>
+  <!-- tears -->
+  <path d="M136 225 Q134 244 133 256" stroke="#6ab8d8" stroke-width="2" fill="none"/>
+  <path d="M161 225 Q163 244 164 256" stroke="#6ab8d8" stroke-width="2" fill="none"/>
+  <path d="M100 274 Q80 322 76 368" stroke="#7a2040" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <path d="M196 274 Q216 316 222 360" stroke="#7a2040" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <!-- speech bubble -->
+  <path d="M220 118 Q220 84 326 84 Q432 84 432 118 Q432 150 326 150 Q280 150 248 150 L236 168 L246 147 Q220 147 220 118Z" fill="#f5ede0" stroke="#b5451b" stroke-width="2"/>
+  <text x="326" y="108" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#b5451b">He loves my</text>
+  <text x="326" y="125" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#b5451b">best friend?!</text>
+  <text x="326" y="142" text-anchor="middle" font-size="16">😱</text>
+
+  <!-- INSPECTOR SACK right, dejected -->
+  <path d="M660 390 L660 264 Q680 252 714 250 Q748 252 768 264 L768 390Z" fill="#1a2a5a"/>
+  <ellipse cx="714" cy="212" rx="34" ry="40" fill="#c49a6c"/>
+  <rect x="680" y="186" width="68" height="12" rx="3" fill="#1a2a5a"/>
+  <rect x="685" y="172" width="58" height="20" rx="4" fill="#1a2a5a"/>
+  <rect x="695" y="170" width="38" height="8" fill="#f5a623"/>
+  <circle cx="703" cy="210" r="4" fill="#0d0a05"/>
+  <circle cx="724" cy="210" r="4" fill="#0d0a05"/>
+  <!-- sad mouth -->
+  <path d="M703 226 Q714 220 726 226" stroke="#8b6343" stroke-width="2" fill="none"/>
+  <path d="M660 274 Q640 318 636 364" stroke="#1a2a5a" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <path d="M768 274 Q788 314 794 360" stroke="#1a2a5a" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <!-- pink slip -->
+  <rect x="800" y="230" width="64" height="50" rx="3" fill="#f5ede0" transform="rotate(12,832,255)"/>
+  <text x="804" y="246" font-family="Georgia,serif" font-size="8" fill="#b5451b" transform="rotate(12,832,255)">DISMISSED</text>
+  <text x="804" y="258" font-family="Georgia,serif" font-size="7" fill="#8b6343" transform="rotate(12,832,255)">No criminals</text>
+  <text x="804" y="269" font-family="Georgia,serif" font-size="7" fill="#8b6343" transform="rotate(12,832,255)">= no work</text>
+  <!-- inspector speech -->
+  <path d="M520 110 Q520 80 628 80 Q736 80 736 110 Q736 138 628 138 Q592 138 564 138 L552 156 L562 135 Q520 135 520 110Z" fill="#f5ede0" stroke="#1a2a5a" stroke-width="1.5"/>
+  <text x="628" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#1a2a5a">No criminals left...</text>
+  <text x="628" y="118" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#1a2a5a">I've lost my job!</text>
+  <text x="628" y="132" text-anchor="middle" font-size="14">😤</text>
+</svg></div>
+  <div class="section-title-bar">
+    <div class="section-tag">&#128270; Section 3 &middot; Chapter 2</div>
+    <h2>Truths That Hurt</h2>
+  </div>
+</div>
+<div class="script-panel">
+  <div class="script-inner">
+    <div class="script-header">
+      <span class="script-who">🎤 Vittor &nbsp;·&nbsp; Inspector Sack</span>
+      <button class="script-toggle" onclick="toggleScript('ch2')">Show Script &#9662;</button>
     </div>
-    <div id="scr-progress" style="margin-top:16px;font-family:'Orbitron',sans-serif;font-size:.65rem;color:var(--muted);letter-spacing:.1em"></div>
+    <ol class="script-lines" id="lines-ch2" style="display:none"><li><span class="script-icon">🕵️</span>Inspector Sack was a detective. He wanted to use the machine to catch criminals.</li><li><span class="script-icon">🔍</span>The Truth Machine revealed many innocent people — and many real criminals.</li><li><span class="script-icon">🏛️</span>But after that... there were no more mysteries to solve. He lost his job.</li><li><span class="script-icon">😤</span>Inspector Sack began to hate the machine. The truth made him useless.</li></ol>
+  </div>
+</div>
+<div class="game-section">
+  <div class="game-inner">
+    <div class="game-badge">&#127918; Mini Game 3</div>
+    <div class="game-title">Unscramble the Word!</div>
+    <div class="game-subtitle">Key words from the story &#8212; can you figure them out?</div>
+    <div class="scr-word" id="scr-word"></div>
+    <div class="scr-hint" id="scr-hint"></div>
+    <input class="scr-input" id="scr-input" placeholder="TYPE YOUR ANSWER&#8230;" maxlength="15"
+      oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')scrCheck()">
+    <div class="feedback" id="scr-fb" style="margin-bottom:12px"></div>
+    <div class="scr-btns">
+      <button class="btn-next" onclick="scrCheck()">Check &#10003;</button>
+      <button class="btn-skip" onclick="scrSkip()">Skip &#8594;</button>
+    </div>
+    <div id="scr-prog" style="margin-top:14px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)"></div>
   </div>
 </div>
 
-<!-- ===== CAPÍTULO 3 ===== -->
-<section id="cap3" class="section">
-  <div class="section-header">
-    <div class="section-num">03</div>
-    <div class="section-label">
-      <span class="section-tag">📖 Capítulo Três</span>
-      <h2 class="section-title">A Grande Decisão</h2>
-    </div>
-  </div>
-  <div class="content-card">
-    <p>No capítulo mais tenso do livro, a situação chega ao limite. A cidade está dividida: metade quer continuar usando a Máquina da Verdade, metade quer destruí-la.</p>
-    <p>Os personagens principais precisam fazer uma escolha difícil. Cada decisão tem consequências — tanto para eles quanto para toda a cidade. Aqui o livro mostra que a vida raramente tem respostas fáceis.</p>
-    <div class="highlight-box">⚡ "Às vezes, proteger as pessoas significa confiar nelas."</div>
-    <p>Um dos momentos mais marcantes: um personagem precisa mentir para proteger alguém que ama. Mas a Máquina da Verdade está lá, observando. O que ele vai fazer? A tensão é incrível!</p>
-    <p>O autor Norman Whitney usa esse momento para nos fazer pensar: <strong>segurança e liberdade podem existir juntas?</strong> Ou sempre temos que escolher uma das duas?</p>
-    <div class="char-list">
-      <span class="char-tag a">⚖️ Dilema central</span>
-      <span class="char-tag b">❤️ Amor vs. Lei</span>
-      <span class="char-tag c">🔥 Momento decisivo</span>
-    </div>
-  </div>
-</section>
+<!-- ── CHAPTER 3 ── -->
+<div class="story-section" id="s-ch3">
+  <div class="section-visual"><svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg3" cx="45%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#0a1520"/>
+      <stop offset="100%" stop-color="#050a10"/>
+    </radialGradient>
+    <filter id="wf"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="960" height="400" fill="url(#bg3)"/>
+  <rect x="0" y="340" width="960" height="60" fill="#040810"/>
+  <!-- hotel walls -->
+  <rect x="40" y="30" width="880" height="310" fill="#0d1828" rx="3"/>
+  <!-- wallpaper subtle lines -->
+  <rect x="50" y="40" width="860" height="290" fill="none" stroke="#14263a" stroke-width=".8"/>
+  <!-- window -->
+  <rect x="415" y="50" width="130" height="120" rx="3" fill="#080e18" stroke="#1e3a52" stroke-width="3"/>
+  <line x1="480" y1="50" x2="480" y2="170" stroke="#1e3a52" stroke-width="2"/>
+  <line x1="415" y1="110" x2="545" y2="110" stroke="#1e3a52" stroke-width="2"/>
+  <!-- city through window -->
+  <rect x="418" y="54" width="28" height="54" fill="#0a1c30"/>
+  <rect x="450" y="62" width="22" height="46" fill="#0d2040"/>
+  <rect x="476" y="56" width="18" height="52" fill="#0a1c30"/>
+  <rect x="498" y="64" width="20" height="44" fill="#0d2040"/>
+  <rect x="522" y="58" width="16" height="50" fill="#0a1c30"/>
+  <rect x="420" y="60" width="5" height="5" fill="#f5a623" opacity=".8"/>
+  <rect x="430" y="72" width="5" height="5" fill="#f5a623" opacity=".6"/>
+  <rect x="453" y="68" width="5" height="5" fill="#00aeef" opacity=".7"/>
+  <rect x="480" y="62" width="4" height="4" fill="#f5a623" opacity=".7"/>
+  <!-- round table -->
+  <ellipse cx="480" cy="310" rx="210" ry="55" fill="#0a0d10"/>
+  <ellipse cx="480" cy="304" rx="210" ry="52" fill="#121e2e"/>
+  <ellipse cx="480" cy="298" rx="206" ry="48" fill="#182538"/>
+  <!-- teacups -->
+  <ellipse cx="380" cy="296" rx="18" ry="8" fill="#0d1825"/>
+  <rect x="364" y="282" width="32" height="16" rx="6" fill="#1e3040"/>
+  <path d="M396 290 Q404 294 399 300" stroke="#1e3040" stroke-width="3" fill="none"/>
+  <ellipse cx="480" cy="290" rx="18" ry="8" fill="#0d1825"/>
+  <rect x="464" y="276" width="32" height="16" rx="6" fill="#1e3040"/>
+  <ellipse cx="580" cy="296" rx="18" ry="8" fill="#0d1825"/>
+  <rect x="564" y="282" width="32" height="16" rx="6" fill="#1e3040"/>
 
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">🎯</div><div class="divider-line"></div></div>
+  <!-- MRS SEEKER sitting left -->
+  <path d="M150 380 L150 262 Q168 252 198 250 Q228 252 246 262 L246 380Z" fill="#7a2040"/>
+  <ellipse cx="198" cy="222" rx="28" ry="34" fill="#d4a97a"/>
+  <path d="M170 212 Q176 185 198 188 Q220 185 226 212 Q222 197 198 200 Q174 197 170 212Z" fill="#3d1a0a"/>
+  <ellipse cx="198" cy="193" rx="30" ry="8" fill="#b5451b"/>
+  <rect x="185" y="182" width="26" height="14" rx="3" fill="#8b3210"/>
+  <circle cx="189" cy="220" r="3.5" fill="#1a0800"/>
+  <circle cx="207" cy="220" r="3.5" fill="#1a0800"/>
+  <path d="M191 232 Q198 237 206 232" stroke="#8b6040" stroke-width="1.5" fill="none"/>
+  <path d="M150 272 Q130 318 126 366" stroke="#7a2040" stroke-width="18" stroke-linecap="round" fill="none"/>
 
-<!-- MINI GAME 4 - MEMORY -->
-<div class="game-wrapper">
-  <div class="game-card">
-    <div class="game-title">🎮 Mini Game #4 — Após o Capítulo 3</div>
-    <div class="game-name">Jogo da Memória: Pares do Livro</div>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:4px">Encontre os pares de conceitos do livro! Clique em dois cards.</p>
-    <div style="display:flex;gap:24px;align-items:center;margin:12px 0 4px;">
-      <div style="font-family:'Orbitron',sans-serif;font-size:.65rem;color:var(--muted);letter-spacing:.1em">Pares: <span id="mem-pairs" style="color:var(--text)">0/4</span></div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:.65rem;color:var(--muted);letter-spacing:.1em">Tentativas: <span id="mem-tries" style="color:var(--text)">0</span></div>
+  <!-- INSPECTOR SACK centre -->
+  <path d="M408 380 L408 262 Q428 250 462 248 Q496 250 516 262 L516 380Z" fill="#1a2a5a"/>
+  <ellipse cx="462" cy="220" rx="32" ry="38" fill="#c49a6c"/>
+  <rect x="430" y="195" width="64" height="10" rx="3" fill="#1a2a5a"/>
+  <rect x="435" y="182" width="54" height="18" rx="3" fill="#1a2a5a"/>
+  <rect x="444" y="180" width="36" height="8" fill="#f5a623"/>
+  <circle cx="451" cy="218" r="4" fill="#0d0a05"/>
+  <circle cx="472" cy="218" r="4" fill="#0d0a05"/>
+  <path d="M451 230 Q461 235 474 230" fill="#3d2010"/>
+  <path d="M408 272 Q386 316 382 362" stroke="#1a2a5a" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <path d="M516 272 Q538 312 544 358" stroke="#1a2a5a" stroke-width="20" stroke-linecap="round" fill="none"/>
+
+  <!-- DR SIMPLE right -->
+  <path d="M640 380 L640 266 Q658 256 688 254 Q718 256 736 266 L736 380Z" fill="#2d2818"/>
+  <ellipse cx="688" cy="226" rx="28" ry="34" fill="#b8956a"/>
+  <path d="M660 217 Q666 192 688 195 Q710 192 716 217" fill="#1a0808"/>
+  <rect x="668" y="222" width="40" height="11" rx="5" fill="#0d0d0d"/>
+  <path d="M640 276 Q618 316 614 360" stroke="#2d2818" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <path d="M736 276 Q758 312 764 356" stroke="#2d2818" stroke-width="20" stroke-linecap="round" fill="none"/>
+
+  <!-- speech bubble -->
+  <path d="M80 130 Q80 96 210 96 Q340 96 340 130 Q340 162 210 162 Q172 162 138 162 L124 180 L136 158 Q80 158 80 130Z" fill="#f5ede0" stroke="#1d6b6b" stroke-width="2"/>
+  <text x="210" y="120" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#1d6b6b">"You didn't give us</text>
+  <text x="210" y="138" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#1d6b6b">the real truth!"</text>
+  <text x="210" y="154" text-anchor="middle" font-size="14">😠</text>
+</svg></div>
+  <div class="section-title-bar">
+    <div class="section-tag">&#128300; Section 4 &middot; Chapter 3</div>
+    <h2>The Hotel Meeting</h2>
+  </div>
+</div>
+<div class="script-panel">
+  <div class="script-inner">
+    <div class="script-header">
+      <span class="script-who">🎤 Victoria &nbsp;·&nbsp; Dr Simple</span>
+      <button class="script-toggle" onclick="toggleScript('ch3')">Show Script &#9662;</button>
     </div>
-    <div class="memory-grid" id="mem-grid"></div>
-    <button class="game-btn" onclick="memReset()" id="mem-reset" style="display:none">Jogar Novamente ↺</button>
+    <ol class="script-lines" id="lines-ch3" style="display:none"><li><span class="script-icon">🕵️</span>Dr Simple was a spy. He wanted to discover secrets about another agent.</li><li><span class="script-icon">❓</span>But the machine failed. It could not tell if the spy was lying or telling the truth.</li><li><span class="script-icon">🧠</span>Dr Simple began to suspect Professor Verity was hiding something.</li><li><span class="script-icon">🔐</span>If the machine does not work for everyone... maybe the professor has his own secrets.</li></ol>
+  </div>
+</div>
+<div class="game-section">
+  <div class="game-inner">
+    <div class="game-badge">&#127918; Mini Game 4</div>
+    <div class="game-title">Memory Match</div>
+    <div class="game-subtitle">Find the pairs &#8212; characters and what they discovered!</div>
+    <div class="mem-stats">
+      <span>Pairs: <b id="mem-p">0</b>/4</span>
+      <span>Tries: <b id="mem-t">0</b></span>
+    </div>
+    <div class="mem-grid" id="mem-grid"></div>
+    <div id="mem-msg" style="margin-top:12px;font-size:.95rem;font-weight:700;color:var(--correct)"></div>
+    <button class="btn-next" onclick="memReset()" id="mem-rst" style="display:none;margin-top:10px">Play Again &#8635;</button>
   </div>
 </div>
 
-<!-- ===== PARTE FINAL ===== -->
-<section id="final" class="section">
-  <div class="section-header">
-    <div class="section-num">★</div>
-    <div class="section-label">
-      <span class="section-tag" style="color:var(--gold)">📖 Conclusão</span>
-      <h2 class="section-title" style="color:var(--gold)">A Grande Lição</h2>
-    </div>
-  </div>
-  <div class="content-card">
-    <p>No desfecho da história, o autor nos surpreende com uma conclusão que não é completamente feliz nem completamente triste — é <strong>real</strong>. As coisas se resolvem, mas as perguntas ficam.</p>
-    <p>A Máquina da Verdade nos faz pensar sobre temas que existem de verdade no mundo atual: câmeras de reconhecimento facial, celulares que nos escutam, redes sociais que sabem tudo sobre nós...</p>
-    <div class="highlight-box">🌍 O livro é do passado, mas fala sobre o futuro que já chegou.</div>
-    <p>As grandes lições que o livro deixa:</p>
-    <div class="char-list" style="flex-direction:column;gap:10px;margin:16px 0;">
-      <div class="char-tag a" style="border-radius:10px;padding:12px 18px;">🔒 <strong>Privacidade</strong> — seus pensamentos e sentimentos são seus.</div>
-      <div class="char-tag b" style="border-radius:10px;padding:12px 18px;">🕊️ <strong>Liberdade</strong> — poder escolher é o que nos torna humanos.</div>
-      <div class="char-tag c" style="border-radius:10px;padding:12px 18px;">🤝 <strong>Confiança</strong> — uma sociedade melhor é construída com respeito, não vigilância.</div>
-    </div>
-    <p>Norman Whitney escreveu esse livro para jovens como você — porque são vocês que vão decidir que tipo de mundo querem construir. E esse é o maior poder de todos!</p>
-  </div>
-</section>
+<!-- ── FINAL ── -->
+<div class="story-section" id="s-final">
+  <div class="section-visual"><svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg4" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#2a0a00"/>
+      <stop offset="100%" stop-color="#100503"/>
+    </radialGradient>
+    <filter id="fire"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="spark"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="960" height="400" fill="url(#bg4)"/>
+  <rect x="0" y="340" width="960" height="60" fill="#0a0303"/>
+  <!-- fire glow -->
+  <ellipse cx="480" cy="260" rx="240" ry="100" fill="rgba(255,100,0,.18)" filter="url(#fire)"/>
+  <ellipse cx="480" cy="250" rx="130" ry="60" fill="rgba(255,200,0,.12)" filter="url(#fire)"/>
+  <!-- broken machine centre -->
+  <rect x="350" y="160" width="260" height="150" rx="8" fill="#0e1a0e" stroke="#555" stroke-width="2" opacity=".75"/>
+  <path d="M392 160 L435 250 L412 310" stroke="#ff4400" stroke-width="2.5" fill="none" opacity=".85"/>
+  <path d="M542 168 L508 248 L534 302" stroke="#ff4400" stroke-width="2.5" fill="none" opacity=".85"/>
+  <path d="M350 235 L480 220 L610 240" stroke="#ff4400" stroke-width="1.5" fill="none" opacity=".6"/>
+  <rect x="364" y="172" width="156" height="95" rx="4" fill="#020602"/>
+  <circle cx="480" cy="205" r="5" fill="#ffcc00" filter="url(#spark)"/>
+  <circle cx="455" cy="225" r="3" fill="#ff8800" filter="url(#spark)"/>
+  <circle cx="510" cy="218" r="4" fill="#ffcc00" filter="url(#spark)"/>
+  <!-- flying shards -->
+  <polygon points="562,138 584,116 580,146" fill="#334" opacity=".9"/>
+  <polygon points="600,108 618,88 615,116" fill="#2a3a4a" opacity=".8"/>
+  <polygon points="370,130 350,110 363,138" fill="#334" opacity=".9"/>
+  <polygon points="330,108 314,90 328,118" fill="#2a3a4a" opacity=".8"/>
 
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">🏆</div><div class="divider-line"></div></div>
+  <!-- VERITY slouched right, fallen -->
+  <path d="M720 390 L720 298 Q734 286 756 284 Q778 286 790 298 L790 390Z" fill="#c8bfb0" opacity=".85"/>
+  <ellipse cx="755" cy="264" rx="28" ry="32" fill="#c49a6c"/>
+  <path d="M727 254 Q733 228 755 231 Q777 228 783 254 Q779 238 755 240 Q731 238 727 254Z" fill="#2a1a08"/>
+  <circle cx="746" cy="262" r="3.5" fill="#0d0a05"/>
+  <circle cx="764" cy="262" r="3.5" fill="#0d0a05"/>
+  <path d="M720 308 Q700 354 696 390" stroke="#c8bfb0" stroke-width="18" stroke-linecap="round" fill="none" opacity=".85"/>
+  <!-- money bags floating near verity -->
+  <ellipse cx="840" cy="188" rx="30" ry="34" fill="#c9952a"/>
+  <rect x="826" y="154" width="28" height="18" rx="3" fill="#a07820"/>
+  <text x="840" y="195" text-anchor="middle" font-family="Georgia,serif" font-size="22" fill="#7a5a10">$</text>
+  <ellipse cx="880" cy="220" rx="22" ry="26" fill="#c9952a" opacity=".75"/>
+  <text x="880" y="226" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#7a5a10">$</text>
+  <!-- thought bubble verity -->
+  <path d="M570 100 Q570 66 670 66 Q770 66 770 100 Q770 132 670 132 Q630 132 600 132 L588 150 L598 129 Q570 129 570 100Z" fill="#1a0808" stroke="#e0354b" stroke-width="2"/>
+  <text x="670" y="90" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#ff6633">"I wanted MONEY,</text>
+  <text x="670" y="108" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#ff6633">POWER &amp; FAME."</text>
+  <text x="670" y="124" text-anchor="middle" font-family="monospace" font-size="10" fill="#ff6633">— Prof. Verity</text>
 
-<!-- MINI GAME 5 - FINAL QUIZ -->
-<div class="game-wrapper">
-  <div class="game-card">
-    <div class="game-title">🎮 Mini Game #5 — Desafio Final</div>
-    <div class="game-name">Você é Especialista na Máquina?</div>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">O grande quiz final! Mostre o quanto você aprendeu.</p>
-    <p class="quiz-question" id="q5-text">Carregando...</p>
-    <div class="quiz-options" id="q5-options"></div>
-    <div class="quiz-feedback" id="q5-feedback"></div>
-    <button class="game-btn" id="q5-next" onclick="q5Next()" style="display:none">Próxima →</button>
-    <div id="q5-result" style="display:none;text-align:center;padding:20px 0;">
-      <div class="stars">🌟🌟🌟</div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:1.1rem;color:var(--gold);margin-bottom:8px" id="q5-final-msg"></div>
-      <div id="q5-score-display" class="score-badge" style="margin:0 auto;display:inline-flex"></div>
+  <!-- DR SIMPLE with hammer LEFT-CENTRE -->
+  <ellipse cx="340" cy="140" rx="28" ry="33" fill="#b8956a"/>
+  <path d="M312 130 Q318 106 340 109 Q362 106 368 130" fill="#1a0808"/>
+  <rect x="320" y="137" width="40" height="11" rx="5" fill="#0d0d0d"/>
+  <path d="M312 168 Q322 158 340 156 Q358 158 368 168 L374 270 L306 270Z" fill="#2d2818"/>
+  <!-- raised arm + hammer -->
+  <path d="M312 178 Q285 144 264 116" stroke="#2d2818" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <ellipse cx="262" cy="110" rx="15" ry="11" fill="#b8956a" transform="rotate(-30,262,110)"/>
+  <rect x="232" y="82" width="46" height="18" rx="4" fill="#5a5a5a" transform="rotate(-30,255,91)"/>
+  <rect x="248" y="76" width="12" height="46" rx="2" fill="#7a5a30" transform="rotate(-30,254,99)"/>
+
+  <!-- MRS SEEKER screaming far left -->
+  <path d="M80 390 L80 268 Q98 256 126 254 Q154 256 172 268 L172 390Z" fill="#7a2040"/>
+  <ellipse cx="126" cy="228" rx="28" ry="34" fill="#d4a97a"/>
+  <path d="M98 218 Q104 191 126 194 Q148 191 154 218 Q150 203 126 206 Q102 203 98 218Z" fill="#3d1a0a"/>
+  <ellipse cx="126" cy="197" rx="30" ry="8" fill="#b5451b"/>
+  <rect x="114" y="185" width="24" height="14" rx="3" fill="#8b3210"/>
+  <circle cx="117" cy="225" r="6" fill="white"/>
+  <circle cx="136" cy="225" r="6" fill="white"/>
+  <circle cx="118" cy="227" r="3" fill="#1a0800"/>
+  <circle cx="137" cy="227" r="3" fill="#1a0800"/>
+  <ellipse cx="126" cy="243" rx="9" ry="12" fill="#7a1a1a"/>
+  <path d="M80 278 Q60 328 56 378" stroke="#7a2040" stroke-width="18" stroke-linecap="round" fill="none"/>
+</svg></div>
+  <div class="section-title-bar" style="background:linear-gradient(135deg,#0a1c3a,var(--navy))">
+    <div class="section-tag" style="background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--orange)">&#9889; Section 5 &middot; The End</div>
+    <h2 style="color:var(--orange)">The Machine Reveals Its Master</h2>
+  </div>
+</div>
+<div class="script-panel">
+  <div class="script-inner">
+    <div class="script-header">
+      <span class="script-who">🎤 Vittor &nbsp;·&nbsp; All Characters</span>
+      <button class="script-toggle" onclick="toggleScript('final')">Show Script &#9662;</button>
+    </div>
+    <ol class="script-lines" id="lines-final" style="display:none"><li><span class="script-icon">👁️</span>Professor Verity is called to answer: does he use the machine for good or for power?</li><li><span class="script-icon">⚡</span>The truth about the Truth Machine is finally revealed.</li><li><span class="script-icon">🤔</span>Three lives were changed by one invention. Was it worth it?</li></ol>
+  </div>
+</div>
+<div class="game-section">
+  <div class="game-inner">
+    <div class="game-badge" style="background:linear-gradient(135deg,var(--amber),var(--orange));box-shadow:0 4px 14px rgba(245,166,35,.35)">&#127942; Final Challenge</div>
+    <div class="game-title">Are You a Truth Expert?</div>
+    <div class="game-subtitle">The ultimate question &#8212; show what you&#8217;ve learned!</div>
+    <p class="quiz-q" id="g5-q"></p>
+    <div class="quiz-opts" id="g5-opts"></div>
+    <div class="feedback" id="g5-fb"></div>
+    <button class="btn-next" id="g5-nxt" onclick="g5Next()" style="display:none">Next &#8594;</button>
+    <div id="g5-result" style="display:none;text-align:center;padding:24px 0 8px">
+      <div style="font-size:2.2rem;margin-bottom:10px">&#127881;</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--navy)" id="g5-msg"></div>
+      <div style="font-size:.92rem;color:var(--muted);margin-top:6px" id="g5-sub"></div>
     </div>
   </div>
 </div>
 
-<!-- FINAL CTA -->
-<div class="final-cta" style="position:relative;z-index:1;padding-bottom:80px">
-  <div class="stars">📚✨🚀</div>
-  <h2>Parabéns, Leitor!</h2>
-  <p>Você explorou toda A Máquina da Verdade.<br>Pontuação total: <strong style="color:var(--gold);font-family:'Orbitron',sans-serif" id="final-pts">0</strong> pontos</p>
-  <p style="color:var(--muted);font-size:.85rem">Agora vai lá ler o livro de verdade! 😄</p>
+<div class="finale">
+  <h2>Well done, Reader!</h2>
+  <p>You explored the whole story of <em>The Truth Machine</em>.</p>
+  <div class="big-pts" id="final-pts">0 pts</div>
+  <p style="font-size:.85rem">Now go read the real book! &#128218;</p>
 </div>
 
 <script>
-  let totalPoints = 0;
-  function addPoints(n) {
-    totalPoints += n;
-    document.getElementById('pts').textContent = totalPoints;
-    document.getElementById('final-pts').textContent = totalPoints;
+
+let total = 0;
+function addPts(n) {
+  total += n;
+  document.getElementById('pts').textContent = total;
+  document.getElementById('final-pts').textContent = total + ' pts';
+}
+
+function toggleScript(id) {
+  const lines = document.getElementById('lines-' + id);
+  const btn = lines.closest('.script-panel').querySelector('.script-toggle');
+  const open = lines.style.display !== 'none';
+  lines.style.display = open ? 'none' : 'flex';
+  btn.textContent = open ? 'Show Script \u25be' : 'Hide Script \u25b4';
+  btn.classList.toggle('open', !open);
+}
+
+/* ── GAME 1: TRUE / FALSE ── */
+const tfQ = [
+  { s: "Professor Verity created the Truth Machine because he loved the truth and hated lies.", a: true,  e: "Correct! That's exactly why he invented it." },
+  { s: "The Truth Machine was kept completely secret — nobody outside the lab knew about it.", a: false, e: "Not quite! It was reported in newspapers and became world-famous." }
+];
+let tfI = 0, tfSc = 0;
+
+function tfRender() {
+  if (tfI >= tfQ.length) { tfEnd(); return; }
+  document.getElementById('tf-stat').textContent = tfQ[tfI].s;
+  document.getElementById('tf-qn').textContent = tfI + 1;
+  document.getElementById('tf-sc').textContent = tfSc;
+  document.getElementById('tf-fb').className = 'feedback';
+  document.getElementById('tf-fb').textContent = '';
+  document.getElementById('tf-nxt').style.display = 'none';
+  document.querySelectorAll('.tf-btn').forEach(b => b.disabled = false);
+}
+function tfAns(v) {
+  const d = tfQ[tfI];
+  document.querySelectorAll('.tf-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('tf-fb');
+  if (v === d.a) { fb.className = 'feedback ok'; fb.textContent = '✅ ' + d.e; tfSc += 10; addPts(10); }
+  else           { fb.className = 'feedback err'; fb.textContent = '❌ ' + d.e; }
+  document.getElementById('tf-nxt').style.display = 'inline-block';
+}
+function tfNext() { tfI++; tfRender(); }
+function tfEnd() {
+  document.getElementById('tf-stat').textContent = '🎉 Game over! You scored ' + tfSc + ' points here.';
+  document.getElementById('tf-fb').className = 'feedback ok';
+  document.getElementById('tf-fb').textContent = 'Great work!';
+  document.getElementById('tf-nxt').style.display = 'none';
+}
+tfRender();
+
+/* ── GAME 2: QUIZ ── */
+const g2Q = [
+  { q: "What did Mrs Seeker want to find out from the Truth Machine?", opts: ["If her husband was hiding money","If her husband still loved her","If her best friend was lying","If she should change jobs"], a: 1 },
+  { q: "Why did Inspector Sack want to use the Truth Machine?", opts: ["To find lost treasure","To become famous","To catch criminals","To win a competition"], a: 2 }
+];
+let g2I = 0, g2Sc = 0;
+function g2Render() {
+  if (g2I >= g2Q.length) { g2End(); return; }
+  const d = g2Q[g2I];
+  document.getElementById('g2-q').textContent = 'Q' + (g2I+1) + ': ' + d.q;
+  const c = document.getElementById('g2-opts'); c.innerHTML = '';
+  d.opts.forEach((o, i) => {
+    const b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    b.onclick = () => g2Ans(i); c.appendChild(b);
+  });
+  document.getElementById('g2-fb').className = 'feedback';
+  document.getElementById('g2-fb').textContent = '';
+  document.getElementById('g2-nxt').style.display = 'none';
+}
+function g2Ans(i) {
+  const d = g2Q[g2I];
+  const btns = document.querySelectorAll('#g2-opts .quiz-opt');
+  btns.forEach(b => b.disabled = true);
+  btns[d.a].classList.add('correct');
+  const fb = document.getElementById('g2-fb');
+  if (i === d.a) { fb.className = 'feedback ok'; fb.textContent = '✅ Correct! +15 points'; g2Sc += 15; addPts(15); }
+  else { btns[i].classList.add('wrong'); fb.className = 'feedback err'; fb.textContent = '❌ Not quite! Correct answer highlighted.'; }
+  document.getElementById('g2-nxt').style.display = 'inline-block';
+}
+function g2Next() { g2I++; g2Render(); }
+function g2End() {
+  document.getElementById('g2-q').textContent = '🎉 Quiz done! You scored ' + g2Sc + ' points here.';
+  document.getElementById('g2-opts').innerHTML = '';
+  document.getElementById('g2-nxt').style.display = 'none';
+  const e = document.getElementById('g2-end'); e.style.display = 'block';
+  e.textContent = 'Keep going — the story gets exciting!';
+}
+g2Render();
+
+/* ── GAME 3: SCRAMBLE ── */
+const scrW = [
+  { w: 'TRUTH',   h: 'The opposite of a lie 🤔' },
+  { w: 'MACHINE', h: 'An invented device or gadget ⚙️' }
+];
+let scrI = 0, scrSc = 0;
+function scrScramble(w) {
+  let a = w.split('');
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-
-  /* ====== GAME 1: TRUE/FALSE ====== */
-  const tfData = [
-    { q:"A Máquina da Verdade consegue detectar quando uma pessoa está mentindo.", a:true, exp:"Correto! Essa é exatamente a função da máquina na história." },
-    { q:"No início do livro, a cidade onde a história se passa é um lugar completamente seguro e tranquilo.", a:false, exp:"Não! A cidade tem muitos problemas de segurança. É por isso que a máquina é criada." },
-    { q:"A Máquina da Verdade analisa a voz e expressões das pessoas para detectar mentiras.", a:true, exp:"Isso mesmo! Ela usa vários sinais do corpo para descobrir se alguém mente." },
-    { q:"Todo mundo na cidade fica feliz com a Máquina da Verdade e não há problemas.", a:false, exp:"Errado! Muitos problemas surgem. As pessoas sentem que perderam sua privacidade." }
-  ];
-  let tfIdx = 0, tfPts = 0;
-
-  function tfRender() {
-    if(tfIdx >= tfData.length) { tfEnd(); return; }
-    const d = tfData[tfIdx];
-    document.getElementById('tf-statement').textContent = d.q;
-    document.getElementById('tf-q').textContent = tfIdx+1;
-    document.getElementById('tf-pts').textContent = tfPts;
-    document.getElementById('tf-feedback').className = 'quiz-feedback';
-    document.getElementById('tf-feedback').textContent = '';
-    document.getElementById('tf-next').style.display='none';
-    document.querySelectorAll('.tf-btn').forEach(b=>b.disabled=false);
+  return a.join('') === w ? scrScramble(w) : a.join('');
+}
+function scrRender() {
+  if (scrI >= scrW.length) { scrEnd(); return; }
+  const d = scrW[scrI];
+  document.getElementById('scr-word').textContent = scrScramble(d.w);
+  document.getElementById('scr-hint').textContent = 'Hint: ' + d.h;
+  const inp = document.getElementById('scr-input');
+  inp.value = ''; inp.disabled = false; inp.focus();
+  document.getElementById('scr-fb').className = 'feedback';
+  document.getElementById('scr-fb').textContent = '';
+  document.getElementById('scr-prog').textContent = 'Word ' + (scrI+1) + ' of ' + scrW.length;
+}
+function scrCheck() {
+  const v = document.getElementById('scr-input').value.trim().toUpperCase();
+  const correct = scrW[scrI].w;
+  const fb = document.getElementById('scr-fb');
+  if (v === correct) {
+    fb.className = 'feedback ok'; fb.textContent = '✅ Correct! +20 points';
+    scrSc += 20; addPts(20);
+    document.getElementById('scr-input').disabled = true;
+    setTimeout(() => { scrI++; scrRender(); }, 1400);
+  } else {
+    fb.className = 'feedback err'; fb.textContent = '❌ Try again! (' + v.length + ' of ' + correct.length + ' letters)';
   }
+}
+function scrSkip() {
+  document.getElementById('scr-fb').className = 'feedback err';
+  document.getElementById('scr-fb').textContent = 'The word was: ' + scrW[scrI].w;
+  setTimeout(() => { scrI++; scrRender(); }, 1400);
+}
+function scrEnd() {
+  document.getElementById('scr-word').textContent = '🏆';
+  document.getElementById('scr-hint').textContent = '';
+  document.getElementById('scr-input').style.display = 'none';
+  document.getElementById('scr-fb').className = 'feedback ok';
+  document.getElementById('scr-fb').textContent = 'All words found! You scored ' + scrSc + ' here.';
+  document.getElementById('scr-prog').textContent = 'Scramble complete!';
+}
+scrRender();
 
-  function tfAnswer(ans) {
-    const d = tfData[tfIdx];
-    const fb = document.getElementById('tf-feedback');
-    document.querySelectorAll('.tf-btn').forEach(b=>b.disabled=true);
-    if(ans === d.a) {
-      fb.className='quiz-feedback show-correct';
-      fb.textContent='✅ Correto! '+d.exp;
-      tfPts+=10; addPoints(10);
-    } else {
-      fb.className='quiz-feedback show-wrong';
-      fb.textContent='❌ Errado! '+d.exp;
-    }
-    document.getElementById('tf-next').style.display='inline-block';
-  }
-
-  function tfNext() {
-    tfIdx++;
-    tfRender();
-  }
-
-  function tfEnd() {
-    document.getElementById('tf-statement').textContent='🎉 Parabéns! Você terminou o mini game com '+tfPts+' pontos!';
-    document.getElementById('tf-feedback').className='quiz-feedback show-correct';
-    document.getElementById('tf-feedback').textContent='Você ganhou '+tfPts+' pontos neste game!';
-    document.getElementById('tf-next').style.display='none';
-    document.querySelectorAll('.tf-btn').forEach(b=>b.disabled=true);
-  }
-
-  tfRender();
-
-  /* ====== GAME 2: QUIZ ====== */
-  const q2Data = [
-    { q:"Onde a Máquina da Verdade é instalada na cidade?", opts:["Somente nos bancos","Em delegacias, tribunais e escolas","Apenas nas casas das pessoas","Somente em restaurantes"], a:1 },
-    { q:"O que a máquina exibe na tela ao analisar alguém?", opts:["O nome da pessoa","VERDADE ou MENTIRA","A idade e endereço","O histórico criminal"], a:1 },
-    { q:"Como as pessoas se sentem quando a máquina é instalada?", opts:["Todos ficam tristes imediatamente","Ninguém liga para a máquina","No início ficam empolgadas, depois preocupadas","Ficam sempre felizes"], a:2 },
-    { q:"Qual problema as pessoas começam a sentir com a máquina?", opts:["A máquina quebra muito","Elas se sentem vigiadas e perdem a privacidade","A máquina é muito cara","A máquina faz muito barulho"], a:1 }
-  ];
-  let q2Idx=0, q2Pts=0;
-
-  function q2Render() {
-    if(q2Idx>=q2Data.length){q2End();return;}
-    const d=q2Data[q2Idx];
-    document.getElementById('q2-text').textContent=`Pergunta ${q2Idx+1}/4: ${d.q}`;
-    const container=document.getElementById('q2-options');
-    container.innerHTML='';
-    d.opts.forEach((o,i)=>{
-      const b=document.createElement('button');
-      b.className='quiz-btn'; b.textContent=o;
-      b.onclick=()=>q2Answer(i);
-      container.appendChild(b);
-    });
-    document.getElementById('q2-feedback').className='quiz-feedback';
-    document.getElementById('q2-feedback').textContent='';
-    document.getElementById('q2-next').style.display='none';
-  }
-
-  function q2Answer(idx) {
-    const d=q2Data[q2Idx];
-    const btns=document.querySelectorAll('#q2-options .quiz-btn');
-    btns.forEach(b=>b.disabled=true);
-    btns[d.a].classList.add('correct');
-    const fb=document.getElementById('q2-feedback');
-    if(idx===d.a){
-      fb.className='quiz-feedback show-correct';
-      fb.textContent='✅ Ótimo! Resposta certa!';
-      q2Pts+=15; addPoints(15);
-    } else {
-      btns[idx].classList.add('wrong');
-      fb.className='quiz-feedback show-wrong';
-      fb.textContent='❌ Ops! A correta está destacada em verde.';
-    }
-    document.getElementById('q2-next').style.display='inline-block';
-  }
-
-  function q2Next() { q2Idx++; q2Render(); }
-
-  function q2End() {
-    document.getElementById('q2-text').textContent='🎉 Quiz concluído! Você fez '+q2Pts+' pontos!';
-    document.getElementById('q2-options').innerHTML='';
-    document.getElementById('q2-feedback').className='quiz-feedback show-correct';
-    document.getElementById('q2-feedback').textContent='Parabéns! Continue lendo!';
-    document.getElementById('q2-next').style.display='none';
-    const s=document.getElementById('q2-score');
-    s.style.display='inline-flex'; s.textContent='⭐ '+q2Pts+' pontos neste quiz!';
-  }
-
-  q2Render();
-
-  /* ====== GAME 3: SCRAMBLE ====== */
-  const scrWords = [
-    { word:'VERDADE', hint:'O oposto de mentira 🤔' },
-    { word:'LIBERDADE', hint:'O direito de fazer suas escolhas 🕊️' },
-    { word:'PRIVACIDADE', hint:'Seus segredos pessoais 🔒' },
-    { word:'TECNOLOGIA', hint:'Máquinas e invenções modernas ⚙️' },
-    { word:'SEGURANCA', hint:'Estar protegido de perigos 🛡️' }
-  ];
-  let scrIdx=0, scrPts=0;
-
-  function scrScramble(w) {
-    let a=w.split('');
-    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
-    if(a.join('')===w) return scrScramble(w);
-    return a.join('');
-  }
-
-  function scrRender() {
-    if(scrIdx>=scrWords.length){scrEnd();return;}
-    const d=scrWords[scrIdx];
-    document.getElementById('scr-word').textContent=scrScramble(d.word);
-    document.getElementById('scr-hint').textContent='Dica: '+d.hint;
-    document.getElementById('scr-input').value='';
-    document.getElementById('scr-input').disabled=false;
-    document.getElementById('scr-feedback').className='quiz-feedback';
-    document.getElementById('scr-feedback').textContent='';
-    document.getElementById('scr-progress').textContent=`Palavra ${scrIdx+1} de ${scrWords.length}`;
-  }
-
-  function scrCheck() {
-    const inp=document.getElementById('scr-input').value.trim().toUpperCase();
-    const correct=scrWords[scrIdx].word;
-    const fb=document.getElementById('scr-feedback');
-    if(inp===correct){
-      fb.className='quiz-feedback show-correct';
-      fb.textContent='✅ Correto! A palavra é "'+correct+'"! +20 pontos';
-      scrPts+=20; addPoints(20);
-      document.getElementById('scr-input').disabled=true;
-      setTimeout(()=>{scrIdx++;scrRender();},1500);
-    } else {
-      fb.className='quiz-feedback show-wrong';
-      fb.textContent='❌ Tente novamente! ('+inp.length+'/'+correct.length+' letras)';
-    }
-  }
-
-  function scrSkip() {
-    const fb=document.getElementById('scr-feedback');
-    fb.className='quiz-feedback show-wrong';
-    fb.textContent='A palavra era: '+scrWords[scrIdx].word;
-    setTimeout(()=>{scrIdx++;scrRender();},1500);
-  }
-
-  function scrEnd() {
-    document.getElementById('scr-word').textContent='🏆';
-    document.getElementById('scr-hint').textContent='';
-    document.getElementById('scr-input').style.display='none';
-    document.getElementById('scr-feedback').className='quiz-feedback show-correct';
-    document.getElementById('scr-feedback').textContent='Parabéns! Você ganhou '+scrPts+' pontos neste game!';
-    document.getElementById('scr-progress').textContent='Jogo concluído!';
-  }
-
-  scrRender();
-
-  /* ====== GAME 4: MEMORY ====== */
-  const memPairs = [
-    { emoji:'🤖', label:'MÁQUINA' },
-    { emoji:'🕊️', label:'LIBERDADE' },
-    { emoji:'🔒', label:'SEGREDO' },
-    { emoji:'⚖️', label:'JUSTIÇA' }
-  ];
-
-  let memFlipped=[], memMatched=0, memTries=0, memLocked=false;
-
-  function memBuild() {
-    const cards=[...memPairs,...memPairs].sort(()=>Math.random()-.5);
-    const grid=document.getElementById('mem-grid');
-    grid.innerHTML='';
-    memFlipped=[]; memMatched=0; memTries=0; memLocked=false;
-    document.getElementById('mem-pairs').textContent='0/4';
-    document.getElementById('mem-tries').textContent='0';
-    document.getElementById('mem-reset').style.display='none';
-
-    cards.forEach((c,i)=>{
-      const el=document.createElement('div');
-      el.className='memory-card';
-      el.dataset.idx=i; el.dataset.label=c.label;
-      el.innerHTML=`<div class="memory-front">❓</div><div class="memory-back">${c.emoji}<br>${c.label}</div>`;
-      el.onclick=()=>memFlip(el);
-      grid.appendChild(el);
-    });
-  }
-
-  function memFlip(el) {
-    if(memLocked||el.classList.contains('flipped')||el.classList.contains('matched')) return;
-    el.classList.add('flipped');
-    memFlipped.push(el);
-    if(memFlipped.length===2){
-      memLocked=true; memTries++;
-      document.getElementById('mem-tries').textContent=memTries;
-      const [a,b]=memFlipped;
-      if(a.dataset.label===b.dataset.label){
-        a.classList.add('matched'); b.classList.add('matched');
-        memMatched++;
-        document.getElementById('mem-pairs').textContent=memMatched+'/4';
-        memFlipped=[]; memLocked=false;
-        addPoints(25);
-        if(memMatched===4){
-          setTimeout(()=>{
-            document.getElementById('mem-reset').style.display='inline-block';
-          },600);
-        }
-      } else {
-        setTimeout(()=>{
-          a.classList.remove('flipped'); b.classList.remove('flipped');
-          memFlipped=[]; memLocked=false;
-        },1000);
+/* ── GAME 4: MEMORY ── */
+const memP = [
+  { e: '👩', l: 'MRS SEEKER' },
+  { e: '💔', l: 'LOVES ANOTHER' },
+  { e: '🕵️', l: 'INSPECTOR SACK' },
+  { e: '💼', l: 'LOST HIS JOB' }
+];
+let mFlipped = [], mMatched = 0, mTries = 0, mLock = false;
+function memBuild() {
+  const cards = [...memP, ...memP].sort(() => Math.random() - .5);
+  const g = document.getElementById('mem-grid'); g.innerHTML = '';
+  mFlipped = []; mMatched = 0; mTries = 0; mLock = false;
+  document.getElementById('mem-p').textContent = '0';
+  document.getElementById('mem-t').textContent = '0';
+  document.getElementById('mem-msg').textContent = '';
+  document.getElementById('mem-rst').style.display = 'none';
+  cards.forEach((c) => {
+    const el = document.createElement('div'); el.className = 'mem-card';
+    el.dataset.label = c.l;
+    el.innerHTML = '<div class="mem-f">?</div><div class="mem-b">' + c.e + '<br>' + c.l + '</div>';
+    el.onclick = () => memFlip(el); g.appendChild(el);
+  });
+}
+function memFlip(el) {
+  if (mLock || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+  el.classList.add('flipped'); mFlipped.push(el);
+  if (mFlipped.length === 2) {
+    mLock = true; mTries++;
+    document.getElementById('mem-t').textContent = mTries;
+    const [a, b] = mFlipped;
+    if (a.dataset.label === b.dataset.label) {
+      a.classList.add('matched'); b.classList.add('matched');
+      mMatched++; document.getElementById('mem-p').textContent = mMatched;
+      mFlipped = []; mLock = false; addPts(20);
+      if (mMatched === 4) {
+        document.getElementById('mem-msg').textContent = '🎉 All pairs found! Well done!';
+        document.getElementById('mem-rst').style.display = 'inline-block';
       }
-    }
-  }
-
-  function memReset(){ memBuild(); }
-  memBuild();
-
-  /* ====== GAME 5: FINAL QUIZ ====== */
-  const q5Data = [
-    { q:"Qual é o grande tema central de 'A Máquina da Verdade'?", opts:["Uma história de terror de robôs","O conflito entre segurança e liberdade","Uma aventura no espaço","Uma história de amor entre robôs"], a:1 },
-    { q:"O que as 'mentiras do bem' representam no livro?", opts:["Mentiras para roubar dinheiro","Mentiras para enganar a polícia","Mentiras gentis que protegem sentimentos","Mentiras para ganhar jogos"], a:2 },
-    { q:"Qual tecnologia do mundo real tem semelhanças com a Máquina da Verdade?", opts:["Calculadoras","Câmeras de reconhecimento facial","Impressoras","Controles remotos"], a:1 },
-    { q:"Qual a principal mensagem que o livro deixa para os leitores jovens?", opts:["Que tecnologia é sempre ruim","Que mentir é sempre certo","Que eles têm o poder de escolher que mundo construir","Que robôs irão dominar o mundo"], a:2 },
-    { q:"Como o livro termina?", opts:["Completamente feliz para todos","Com uma conclusão realista que deixa reflexões","Com a destruição da cidade","Com o robô virando herói"], a:1 }
-  ];
-  let q5Idx=0, q5Pts=0;
-
-  function q5Render() {
-    if(q5Idx>=q5Data.length){q5End();return;}
-    const d=q5Data[q5Idx];
-    document.getElementById('q5-text').textContent=`Pergunta ${q5Idx+1}/5: ${d.q}`;
-    const c=document.getElementById('q5-options'); c.innerHTML='';
-    d.opts.forEach((o,i)=>{
-      const b=document.createElement('button');
-      b.className='quiz-btn'; b.textContent=o;
-      b.onclick=()=>q5Answer(i);
-      c.appendChild(b);
-    });
-    document.getElementById('q5-feedback').className='quiz-feedback';
-    document.getElementById('q5-feedback').textContent='';
-    document.getElementById('q5-next').style.display='none';
-  }
-
-  function q5Answer(idx){
-    const d=q5Data[q5Idx];
-    const btns=document.querySelectorAll('#q5-options .quiz-btn');
-    btns.forEach(b=>b.disabled=true);
-    btns[d.a].classList.add('correct');
-    const fb=document.getElementById('q5-feedback');
-    if(idx===d.a){
-      fb.className='quiz-feedback show-correct';
-      fb.textContent='✅ Resposta certa! Você é especialista!';
-      q5Pts+=20; addPoints(20);
     } else {
-      btns[idx].classList.add('wrong');
-      fb.className='quiz-feedback show-wrong';
-      fb.textContent='❌ Não foi dessa vez! A correta está em verde.';
+      setTimeout(() => { a.classList.remove('flipped'); b.classList.remove('flipped'); mFlipped = []; mLock = false; }, 1000);
     }
-    document.getElementById('q5-next').style.display='inline-block';
   }
+}
+function memReset() { memBuild(); }
+memBuild();
 
-  function q5Next(){ q5Idx++; q5Render(); }
+/* ── GAME 5: FINAL QUIZ ── */
+const g5Q = [
+  { q: "What does Professor Verity confess he REALLY wanted from the Truth Machine?", opts: ["To help people","To find criminals","Money, power and fame","To study science"], a: 2 }
+];
+let g5I = 0, g5Sc = 0;
+function g5Render() {
+  if (g5I >= g5Q.length) { g5End(); return; }
+  const d = g5Q[g5I];
+  document.getElementById('g5-q').textContent = 'Final Question: ' + d.q;
+  const c = document.getElementById('g5-opts'); c.innerHTML = '';
+  d.opts.forEach((o, i) => {
+    const b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    b.onclick = () => g5Ans(i); c.appendChild(b);
+  });
+  document.getElementById('g5-fb').className = 'feedback';
+  document.getElementById('g5-fb').textContent = '';
+  document.getElementById('g5-nxt').style.display = 'none';
+}
+function g5Ans(i) {
+  const d = g5Q[g5I];
+  const btns = document.querySelectorAll('#g5-opts .quiz-opt');
+  btns.forEach(b => b.disabled = true);
+  btns[d.a].classList.add('correct');
+  const fb = document.getElementById('g5-fb');
+  if (i === d.a) { fb.className = 'feedback ok'; fb.textContent = '✅ Excellent! +25 points'; g5Sc += 25; addPts(25); }
+  else { btns[i].classList.add('wrong'); fb.className = 'feedback err'; fb.textContent = '❌ Not this time! The right answer is highlighted.'; }
+  document.getElementById('g5-nxt').style.display = 'inline-block';
+}
+function g5Next() { g5I++; g5Render(); }
+function g5End() {
+  document.getElementById('g5-q').style.display = 'none';
+  document.getElementById('g5-opts').innerHTML = '';
+  document.getElementById('g5-nxt').style.display = 'none';
+  document.getElementById('g5-fb').textContent = '';
+  const r = document.getElementById('g5-result'); r.style.display = 'block';
+  let msg = '', sub = '';
+  if (g5Sc >= 25) { msg = '🏆 Truth Machine Master!'; sub = 'Perfect — Professor Verity would be impressed!'; }
+  else { msg = '📚 Keep Reading!'; sub = 'Re-read the story and try again!'; }
+  document.getElementById('g5-msg').textContent = msg;
+  document.getElementById('g5-sub').textContent = sub;
+}
+g5Render();
 
-  function q5End(){
-    document.getElementById('q5-text').style.display='none';
-    document.getElementById('q5-options').innerHTML='';
-    document.getElementById('q5-feedback').className='';
-    document.getElementById('q5-feedback').textContent='';
-    document.getElementById('q5-next').style.display='none';
-    const res=document.getElementById('q5-result');
-    res.style.display='block';
-    let msg='';
-    if(q5Pts>=80) msg='🏆 Mestre da Verdade! Incrível!';
-    else if(q5Pts>=60) msg='🌟 Muito bem! Você aprendeu muito!';
-    else if(q5Pts>=40) msg='👍 Bom trabalho! Continue praticando!';
-    else msg='📚 Boa tentativa! Releia o livro!';
-    document.getElementById('q5-final-msg').textContent=msg;
-    document.getElementById('q5-score-display').textContent='⭐ '+q5Pts+' pontos no quiz final · Total: '+totalPoints;
-  }
-
-  q5Render();
 </script>
 </body>
 </html>
