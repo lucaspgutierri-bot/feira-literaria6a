@@ -105,7 +105,7 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .tf-btn.f{background:rgba(224,53,75,.1);border:2px solid var(--wrong);color:var(--wrong);}
 .tf-btn:hover:not(:disabled){filter:brightness(1.1);transform:scale(1.03);}
 .tf-btn:disabled{opacity:.45;cursor:default;}
-.scr-word{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,7vw,3.2rem);letter-spacing:.28em;color:var(--blue);text-align:center;background:var(--white);border:2px dashed rgba(0,174,239,.35);padding:22px;border-radius:12px;margin:16px 0;box-shadow:var(--shadow);}
+.scr-word{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.6rem,9vw,4.16rem);letter-spacing:.28em;color:var(--blue);text-align:center;background:var(--white);border:2px dashed rgba(0,174,239,.35);padding:22px;border-radius:12px;margin:16px 0;box-shadow:var(--shadow);}
 .scr-hint{font-style:italic;color:var(--muted);font-size:.88rem;text-align:center;margin-bottom:16px;}
 .scr-input{width:100%;padding:14px 20px;border-radius:12px;border:2px solid rgba(0,174,239,.25);background:var(--white);font-family:'Syne',sans-serif;font-size:1.1rem;text-align:center;text-transform:uppercase;letter-spacing:.22em;outline:none;color:var(--navy);transition:border .3s;margin-bottom:10px;box-shadow:var(--shadow);}
 .scr-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,174,239,.12);}
@@ -136,6 +136,36 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 /* block translation visual artifacts */
 .notranslate, [translate="no"] { -webkit-user-select: text; }
 font[face] { display: contents !important; } /* neutralise Google Translate font injections */
+
+
+/* ── FONT SIZE INCREASES (mini games, +30%) ── */
+.game-title{font-size:2.6rem !important;}
+.game-subtitle{font-size:1.37rem !important;}
+.quiz-q{font-size:1.63rem !important;}
+.quiz-opt{font-size:1.5rem !important; padding:18px 22px !important;}
+.feedback{font-size:1.43rem !important;}
+.tf-stat{font-size:1.63rem !important;}
+.tf-btn{font-size:1.43rem !important; padding:20px !important;}
+.tf-prog{font-size:1.1rem !important;}
+.scr-hint{font-size:1.37rem !important;}
+.scr-input{font-size:1.69rem !important;}
+.btn-next{font-size:1.24rem !important;}
+.btn-skip{font-size:1.24rem !important;}
+.mem-stats{font-size:1.17rem !important;}
+.mem-b{font-size:.88rem !important;}
+.mem-f{font-family:'Syne',sans-serif; font-weight:800; font-size:2.34rem !important; color:var(--cyan) !important;}
+
+/* letter badge on quiz options */
+.opt-letter{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:39px; height:39px; border-radius:9px;
+  background:linear-gradient(135deg, var(--blue), var(--cyan));
+  color:var(--white); font-family:'Syne',sans-serif;
+  font-weight:800; font-size:1.24rem;
+  margin-right:12px; vertical-align:middle;
+}
+.quiz-opt.correct .opt-letter{ background:var(--correct); }
+.quiz-opt.wrong .opt-letter{ background:var(--wrong); }
 
 </style>
 </head>
@@ -417,13 +447,18 @@ font[face] { display: contents !important; } /* neutralise Google Translate font
 <div class="game-section">
   <div class="game-inner">
     <div class="game-badge">&#127918; Mini Game 2</div>
-    <div class="game-title">Who Wanted What?</div>
-    <div class="game-subtitle">Match the visitor to their reason for coming.</div>
-    <p class="quiz-q" id="g2-q"></p>
-    <div class="quiz-opts" id="g2-opts"></div>
-    <div class="feedback" id="g2-fb"></div>
-    <button class="btn-next" id="g2-nxt" onclick="g2Next()" style="display:none">Next &#8594;</button>
-    <div id="g2-end" style="display:none;font-size:.95rem;font-weight:600;color:var(--correct);margin-top:8px"></div>
+    <div class="game-title">Unscramble the Word!</div>
+    <div class="game-subtitle">Key words from the story &#8212; can you figure them out?</div>
+    <div class="scr-word" id="scr-word"></div>
+    <div class="scr-hint" id="scr-hint"></div>
+    <input class="scr-input" id="scr-input" placeholder="TYPE YOUR ANSWER&#8230;" maxlength="15"
+      oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')scrCheck()">
+    <div class="feedback" id="scr-fb" style="margin-bottom:12px"></div>
+    <div class="scr-btns">
+      <button class="btn-next" onclick="scrCheck()">Check &#10003;</button>
+      <button class="btn-skip" onclick="scrSkip()">Skip &#8594;</button>
+    </div>
+    <div id="scr-prog" style="margin-top:14px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)"></div>
   </div>
 </div>
 
@@ -521,18 +556,13 @@ font[face] { display: contents !important; } /* neutralise Google Translate font
 <div class="game-section">
   <div class="game-inner">
     <div class="game-badge">&#127918; Mini Game 3</div>
-    <div class="game-title">Unscramble the Word!</div>
-    <div class="game-subtitle">Key words from the story &#8212; can you figure them out?</div>
-    <div class="scr-word" id="scr-word"></div>
-    <div class="scr-hint" id="scr-hint"></div>
-    <input class="scr-input" id="scr-input" placeholder="TYPE YOUR ANSWER&#8230;" maxlength="15"
-      oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')scrCheck()">
-    <div class="feedback" id="scr-fb" style="margin-bottom:12px"></div>
-    <div class="scr-btns">
-      <button class="btn-next" onclick="scrCheck()">Check &#10003;</button>
-      <button class="btn-skip" onclick="scrSkip()">Skip &#8594;</button>
-    </div>
-    <div id="scr-prog" style="margin-top:14px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)"></div>
+    <div class="game-title">Who Wanted What?</div>
+    <div class="game-subtitle">Match the visitor to their reason for coming.</div>
+    <p class="quiz-q" id="g2-q"></p>
+    <div class="quiz-opts" id="g2-opts"></div>
+    <div class="feedback" id="g2-fb"></div>
+    <button class="btn-next" id="g2-nxt" onclick="g2Next()" style="display:none">Next &#8594;</button>
+    <div id="g2-end" style="display:none;font-size:.95rem;font-weight:600;color:var(--correct);margin-top:8px"></div>
   </div>
 </div>
 
@@ -820,8 +850,10 @@ function g2Render() {
   const d = g2Q[g2I];
   document.getElementById('g2-q').textContent = 'Q' + (g2I+1) + ': ' + d.q;
   const c = document.getElementById('g2-opts'); c.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
   d.opts.forEach((o, i) => {
-    const b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    const b = document.createElement('button'); b.className = 'quiz-opt';
+    b.innerHTML = '<span class="opt-letter">' + letters[i] + '</span> ' + o;
     b.onclick = () => g2Ans(i); c.appendChild(b);
   });
   document.getElementById('g2-fb').className = 'feedback';
@@ -917,10 +949,10 @@ function memBuild() {
   document.getElementById('mem-t').textContent = '0';
   document.getElementById('mem-msg').textContent = '';
   document.getElementById('mem-rst').style.display = 'none';
-  cards.forEach((c) => {
+  cards.forEach((c, idx) => {
     const el = document.createElement('div'); el.className = 'mem-card';
     el.dataset.label = c.l;
-    el.innerHTML = '<div class="mem-f">?</div><div class="mem-b">' + c.e + '<br>' + c.l + '</div>';
+    el.innerHTML = '<div class="mem-f">' + (idx + 1) + '</div><div class="mem-b">' + c.e + '<br>' + c.l + '</div>';
     el.onclick = () => memFlip(el); g.appendChild(el);
   });
 }
@@ -957,8 +989,10 @@ function g5Render() {
   const d = g5Q[g5I];
   document.getElementById('g5-q').textContent = 'Final Question: ' + d.q;
   const c = document.getElementById('g5-opts'); c.innerHTML = '';
+  const letters5 = ['A', 'B', 'C', 'D'];
   d.opts.forEach((o, i) => {
-    const b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    const b = document.createElement('button'); b.className = 'quiz-opt';
+    b.innerHTML = '<span class="opt-letter">' + letters5[i] + '</span> ' + o;
     b.onclick = () => g5Ans(i); c.appendChild(b);
   });
   document.getElementById('g5-fb').className = 'feedback';
